@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/small_window_layout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:background="@drawable/tmall"
+        android:gravity="center"
+        android:scaleType="fitCenter"
+        android:textColor="#ffffff"
+        android:textSize="12sp" />
+
+</LinearLayout>
