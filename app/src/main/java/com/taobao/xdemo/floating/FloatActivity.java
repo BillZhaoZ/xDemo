@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
 import android.view.View;
@@ -26,11 +27,26 @@ public class FloatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_float);
 
-        // 辅助功能
+       /* new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                FloatUtils.startFloatService(getApplicationContext());
+
+            }
+        }, 8000);*/
+
+
+        // 是否支持小助手功能
         findViewById(R.id.tv_float_accsss).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(getApplicationContext(), Acc_Acitivity.class));
+                boolean supportAssisant = FloatUtils.isSupportAssisant(getApplicationContext());
+
+                if (supportAssisant) {
+                    Toast.makeText(getApplicationContext(), "已经支持小助手功能，点击下方的按钮获取权限吧!!!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "不支持小助手功能，升级手淘版本吧", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

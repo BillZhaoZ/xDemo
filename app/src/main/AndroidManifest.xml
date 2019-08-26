@@ -46,5 +46,6 @@
     <uses-permission android:name="app.custom.permission" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
 </manifest>

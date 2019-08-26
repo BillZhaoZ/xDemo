@@ -15,7 +15,7 @@ import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
  * @Date on 2019-08-20
  * @Desc:
  */
-public class MyWindowManager {
+public class FloatAssistantManager {
     /**
      * 小悬浮窗View的实例
      */
@@ -76,7 +76,7 @@ public class MyWindowManager {
             smallWindow.setParams(smallWindowParams);
             windowManager.addView(smallWindow, smallWindowParams);
 
-            FlowCustomLog.d(LOG_TAG, "MyWindowManager === createSmallWindow === 绘制小助手完成");
+            FlowCustomLog.d(LOG_TAG, "FloatAssistantManager === createSmallWindow === 绘制小助手完成");
         }
 
         return smallWindow;

@@ -5,31 +5,128 @@ import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.taobao.xdemo.FlowCustomLog;
-import com.taobao.xdemo.notification.NotificationService;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 
 /**
  * @author bill
  * @Date on 2019-08-20
- * @Desc:
+ * @Desc: 悬浮窗管理工具类
  */
 public class FloatUtils {
+
+    private static String[] phoneData = {"oppo", "vivo", "huawei", "honnor", "xiaomi"};
+
+    /**
+     * 是否支持小助手功能
+     *
+     * @return
+     */
+    public static boolean isSupportAssisant(Context context) {
+
+        // 手淘版本大于双十一版本 并且
+        if (compareVersion(getPackageInfo(context).versionName, "8.11.0") == 1 && isInAdapterPhone()) {
+            FlowCustomLog.d(LOG_TAG, "FloatUtils === isSupportAssisant === 系统版本、手机厂商、手淘版本为：" + getPackageInfo(context).versionName + "，均支持小助手");
+            return true;
+        }
+
+        return false;
+    }
+
+    private static boolean isInAdapterPhone() {
+        // 当前机型在名单中  并且系统版本大于6.0
+        if (Arrays.asList(phoneData).contains(Build.MANUFACTURER.toLowerCase())
+                && compareVersion(Build.VERSION.RELEASE, "5.1") == 1) {
+
+            FlowCustomLog.d(LOG_TAG, "FloatUtils === isSupportAssisant === 系统版本为："
+                    + Build.VERSION.RELEASE + " 手机厂商为：" + Build.MANUFACTURER.toLowerCase() + "，支持小助手功能");
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * 版本号比较
+     * 1.上面的值为-1 代表：前者小于后者
+     * 2.上面的值为0 代表：两者相等
+     * 3.上面的值为1 代表：前者大于后者
+     *
+     * @param version1
+     * @param version2
+     * @return
+     */
+    public static int compareVersion(String version1, String version2) {
+        if (version1.equals(version2)) {
+            return 0;
+        }
+        String[] version1Array = version1.split("\\.");
+        String[] version2Array = version2.split("\\.");
+
+        int index = 0;
+        // 获取最小长度值
+        int minLen = Math.min(version1Array.length, version2Array.length);
+        int diff = 0;
+        // 循环判断每位的大小
+        Log.d("HomePageActivity", "verTag2=2222=" + version1Array[index]);
+        while (index < minLen
+                && (diff = Integer.parseInt(version1Array[index])
+                - Integer.parseInt(version2Array[index])) == 0) {
+            index++;
+        }
+        if (diff == 0) {
+            // 如果位数不一致，比较多余位数
+            for (int i = index; i < version1Array.length; i++) {
+                if (Integer.parseInt(version1Array[i]) > 0) {
+                    return 1;
+                }
+            }
+
+            for (int i = index; i < version2Array.length; i++) {
+                if (Integer.parseInt(version2Array[i]) > 0) {
+                    return -1;
+                }
+            }
+            return 0;
+        } else {
+            return diff > 0 ? 1 : -1;
+        }
+    }
+
+    //通过PackageInfo得到的想要启动的应用的包名
+    private static PackageInfo getPackageInfo(Context context) {
+        PackageInfo pInfo = null;
+
+        try {
+            //通过PackageManager可以得到PackageInfo
+            PackageManager pManager = context.getPackageManager();
+            pInfo = pManager.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+
+            return pInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return pInfo;
+    }
 
     /**
      * 打开小助手
@@ -40,7 +137,6 @@ public class FloatUtils {
         Intent intent = new Intent(context, FloatWindowService.class);
         context.startService(intent);
     }
-
 
     // 悬浮窗管理界面
               /*  Intent intent = new Intent();
@@ -134,7 +230,6 @@ public class FloatUtils {
 
 //                boolean b = Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED || mode == AppOpsManager.MODE_IGNORED;
                 boolean b = Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED;
-
                 FlowCustomLog.d(LOG_TAG, "FloatUtils === checkFloatPermission === 大于26版本，返回" + b);
                 return b;
             } else {
@@ -170,5 +265,27 @@ public class FloatUtils {
             names.add(ri.activityInfo.packageName);
         }
         return names;
+    }
+
+    /**
+     * 关闭下拉通知栏
+     * <p>
+     * 需要添加权限：<uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
+     *
+     * @param context
+     */
+    public static void collapseStatusBar(Context context) {
+        try {
+            Object statusBarManager = context.getSystemService("statusbar");
+            Method collapse;
+            if (Build.VERSION.SDK_INT <= 16) {
+                collapse = statusBarManager.getClass().getMethod("collapse");
+            } else {
+                collapse = statusBarManager.getClass().getMethod("collapsePanels");
+            }
+            collapse.invoke(statusBarManager);
+        } catch (Exception localException) {
+            localException.printStackTrace();
+        }
     }
 }

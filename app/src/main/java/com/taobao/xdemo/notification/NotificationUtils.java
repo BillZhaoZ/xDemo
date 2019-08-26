@@ -19,6 +19,9 @@ import com.taobao.xdemo.FlowCustomLog;
 import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.floating.MessageManager;
+import com.taobao.xdemo.floating.TrackUtils;
+
+import java.util.HashMap;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
@@ -32,6 +35,8 @@ public class NotificationUtils {
 
     static final String NOTICE_ID_KEY = "NOTICE_ID";
     static final String ACTION_CLOSE_NOTICE = "cn.campusapp.action.closenotice";
+    static final String BROADCAST_FLAG = "flag";
+    static final String LANDINGURL = "landingUrl";
 
     /**
      * 关闭通知
@@ -66,13 +71,14 @@ public class NotificationUtils {
      * @param context
      * @return
      */
-    public static Notification showNotification(Context context) {
+    public static Notification showNotification(Context context, MessageData messageData) {
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 绘制通知");
-
         boolean b = NotificationManagerCompat.from(context).areNotificationsEnabled();
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 是否有通知权限：" + b);
 
-        // todo 曝光和点击事件
+        // 通知栏曝光事件
+        TrackUtils.sendFloatData(TrackUtils.ARG1_NOTIFICATION_EXPOSE, messageData.ladningUrl, "", new HashMap<String, String>());
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         builder.setSmallIcon(R.drawable.icon_circle);
         builder.setOngoing(true);
@@ -80,49 +86,24 @@ public class NotificationUtils {
 
         // 自定义布局
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_bar);
-        remoteViews.setTextViewText(R.id.tv_setting, "设置");
+        remoteViews.setImageViewResource(R.id.iv_setting, R.drawable.delete);
         remoteViews.setImageViewResource(R.id.iv_main_page, R.drawable.share);
         remoteViews.setImageViewResource(R.id.iv_main_crazy, R.drawable.pic);
 
-        //点击事件
+        /**
+         * 点击事件处理
+         */
         // 主会场
-        Intent intentMainPage = new Intent();
-        intentMainPage.setData(Uri.parse(MessageManager.MAIN_PAGE));
-        intentMainPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        int requestCode = (int) SystemClock.uptimeMillis();
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intentMainPage, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.iv_main_page, pendingIntent);
+        setIntent(context, messageData, remoteViews, "1", R.id.iv_main_page);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 跳去主会场");
 
-
         //主互动
-        Intent intentCrazy = new Intent();
-        intentCrazy.setData(Uri.parse(MessageManager.MAIN_CRAZY));
-        intentCrazy.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        int requestCode1 = (int) SystemClock.uptimeMillis();
-        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, requestCode1, intentCrazy, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.iv_main_crazy, pendingIntent1);
+        setIntent(context, messageData, remoteViews, "2", R.id.iv_main_crazy);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 跳去主互动");
 
-
-        //设置
-        /*int requestCode2 = (int) SystemClock.uptimeMillis();
-        Intent intentSettings = new Intent(context, NotificationBroadcastReceiver.class);
-        intentSettings.putExtra(NOTICE_ID_KEY, ACTION_CLOSE_NOTICE);
-        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(context, requestCode2, intentSettings, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.tv_setting, pendingIntent2);
-        FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 关闭通知");*/
-
-
         //设置 去我的淘宝设置页面
-        int requestCode2 = (int) SystemClock.uptimeMillis();
-        Intent intentSettings = new Intent();
-        intentSettings.setData(Uri.parse(MessageManager.MAIN_SETTINGS));
-        intentSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, requestCode2, intentSettings, PendingIntent.FLAG_UPDATE_CURRENT);
-        remoteViews.setOnClickPendingIntent(R.id.tv_setting, pendingIntent2);
+        setIntent(context, messageData, remoteViews, "3", R.id.iv_setting);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 关闭通知");
-
 
         //消息通道
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
@@ -145,46 +126,43 @@ public class NotificationUtils {
         return notification;
     }
 
+    /**
+     * 设置点击事件的intent
+     *
+     * @param context
+     * @param messageData
+     * @param remoteViews
+     * @param flag
+     * @param viewId
+     */
+    private static void setIntent(Context context, MessageData messageData, RemoteViews remoteViews, String flag, int viewId) {
+        Intent intentMainPage = new Intent(context, NotificationBroadcastReceiver.class);
+        intentMainPage.putExtra(NOTICE_ID_KEY, ACTION_CLOSE_NOTICE);
+        intentMainPage.putExtra(BROADCAST_FLAG, flag);
+        intentMainPage.putExtra(LANDINGURL, messageData.ladningUrl);
+
+        int requestCode = (int) SystemClock.uptimeMillis();
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, requestCode, intentMainPage, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(viewId, pendingIntent);
+    }
 
     /**
-     * 创建通知
+     * 跳转页面  埋点
      *
-     * @return
+     * @param context
+     * @param landingUrl
+     * @param arg1
+     * @param openURL
      */
-    public static Notification getNotification(Context context) {
+    public static void jumpClick(Context context, String landingUrl, String arg1, String openURL) {
+        TrackUtils.sendFloatData(arg1, landingUrl, "", new HashMap<String, String>());
 
-        RemoteViews mRemoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_bar);
-//        mRemoteViews.setTextViewText(R.id.tv_double_11, "哈哈哈哈哈");
+        Intent intent = new Intent();
+        intent.setData(Uri.parse(openURL));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
 
-        Notification.Builder builder = new Notification.Builder(context);
-        builder.setSmallIcon(R.drawable.ic_launcher_foreground);
-//        builder.setContent(mRemoteViews);
-
-        builder.setContentText("hahah");
-        builder.setContentTitle("hahah");
-
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-
-        // 兼容  API 26，Android 8.0
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            // 第三个参数表示通知的重要程度，默认则只在通知栏闪烁一下
-            NotificationChannel notificationChannel = new NotificationChannel("AppTestNotificationId",
-                    "AppTestNotificationName", NotificationManager.IMPORTANCE_HIGH);
-
-            // 注册通道，注册后除非卸载再安装否则不改变
-            notificationManager.createNotificationChannel(notificationChannel);
-            builder.setChannelId("AppTestNotificationId");
-        }
-
-        // 常驻通知栏  清理通知还在  但是杀进程就不在了
-        builder.setOngoing(true);
-
-        return builder.build();
+        FlowCustomLog.d(LOG_TAG, "NotificationBroadcastReceiver === jumpClick === arg1=" + arg1 + " openURL=" + openURL);
     }
 
-    // 取消通知
-    public static void cancelNotification(Context context) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancel(R.string.app_name);
-    }
 }

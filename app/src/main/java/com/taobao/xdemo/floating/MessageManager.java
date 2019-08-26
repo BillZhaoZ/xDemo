@@ -24,7 +24,7 @@ public class MessageManager {
 
     public static final String MAIN_PAGE = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=1111.tmall.com";
     public static final String MAIN_CRAZY = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=https%3a%2f%2fh5.m.taobao.com%2fbcec%2fdahanghai-jump.html%3fspm%3d2014.ugdhh.2200803433985.1001-5543%26bc_fl_src%3dgrowth_dhh_2200803433985_1001-5543%26activity_id%3d710&spm=2014.ugdhh.2200803433985.1001-5543&bc_fl_src=growth_dhh_2200803433985_1001-5543&materialid=1001&activity_id=710";
-    public static final String MAIN_SETTINGS = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=http://m.taobao.com/go/mytaobaocommonsettings";
+    public static final String MAIN_SETTINGS = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=http%3A%2F%2Fm.taobao.com%2Fgo%2Fmytaobaocommonsettings";
 
     private Context mContext;
     private boolean isShowNewMessage; // 小助手显示时，是否有新消息到达  需要处理
@@ -54,7 +54,6 @@ public class MessageManager {
         @Override
         public boolean handleMessage(Message msg) {
             handleAssMesssage(msg);
-
             return false;
         }
     });
@@ -73,26 +72,26 @@ public class MessageManager {
             //  小助手没有新消息   小助手不消失
             if (!isShowNewMessage && !isDisappear) {
 
-                if (FloatUtils.isHome(mContext) && !MyWindowManager.isWindowShowing()) {
+                if (FloatUtils.isHome(mContext) && !FloatAssistantManager.isWindowShowing()) {
                     // 当前界面是桌面，且没有悬浮窗显示，则创建悬浮窗。
 
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            MyWindowManager.createSmallWindow(mContext);
+                            FloatAssistantManager.createSmallWindow(mContext);
                         }
                     });
-                } else if (!FloatUtils.isHome(mContext) && MyWindowManager.isWindowShowing()) {
+                } else if (!FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
                     // 当前界面不是桌面，且有悬浮窗显示，则移除悬浮窗。
 
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            MyWindowManager.removeSmallWindow(mContext);
-                            MyWindowManager.removeBigWindow(mContext);
+                            FloatAssistantManager.removeSmallWindow(mContext);
+                            FloatAssistantManager.removeBigWindow(mContext);
                         }
                     });
-                } else if (FloatUtils.isHome(mContext) && MyWindowManager.isWindowShowing()) {
+                } else if (FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
                     // 当前界面是桌面，且有悬浮窗显示，则更新内存数据。
                     handler.post(new Runnable() {
                         @Override
@@ -115,7 +114,7 @@ public class MessageManager {
                 public void run() {
                     Toast.makeText(mContext, "快点我，8s后我就不动了，抓紧时间点啊。。。", Toast.LENGTH_LONG).show();
 
-                    FloatWindowSmallView smallWindow = MyWindowManager.createSmallWindow(mContext);
+                    FloatWindowSmallView smallWindow = FloatAssistantManager.createSmallWindow(mContext);
 
                     ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(smallWindow, "rotation", 720f);
                     objectAnimator.setDuration(8000);
@@ -141,14 +140,14 @@ public class MessageManager {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    FloatWindowSmallView smallWindow = MyWindowManager.createSmallWindow(mContext);
+                    FloatWindowSmallView smallWindow = FloatAssistantManager.createSmallWindow(mContext);
 
                     ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(smallWindow, "rotation", 720f);
                     objectAnimator.setDuration(2000);
                     objectAnimator.start();
 
                     mContext.stopService(new Intent(mContext, FloatWindowService.class));
-                    MyWindowManager.removeSmallWindow(mContext);
+                    FloatAssistantManager.removeSmallWindow(mContext);
                 }
             });
         }
@@ -199,8 +198,8 @@ public class MessageManager {
             FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 非双十一当天，跳转后 isClickMain=" + isClickMainPage);
         }
 
-//        MyWindowManager.createBigWindow(getContext());
-//        MyWindowManager.removeSmallWindow(getContext());
+//        FloatAssistantManager.createBigWindow(getContext());
+//        FloatAssistantManager.removeSmallWindow(getContext());
     }
 
     /**

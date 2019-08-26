@@ -29,9 +29,7 @@ public class NotificationService extends Service {
         super.onCreate();
 
         // 开启前台服务
-//        startForeground(1, NotificationUtils.getNotification(this));
-
-        startForeground(111, NotificationUtils.showNotification(this));
+        startForeground(111, NotificationUtils.showNotification(this, new MessageData()));
     }
 
     @Override

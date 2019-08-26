@@ -40,8 +40,8 @@ public class FloatWindowBigView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 // 点击关闭悬浮窗的时候，移除所有悬浮窗，并停止Service
-                MyWindowManager.removeBigWindow(context);
-                MyWindowManager.removeSmallWindow(context);
+                FloatAssistantManager.removeBigWindow(context);
+                FloatAssistantManager.removeSmallWindow(context);
 
                 Intent intent = new Intent(getContext(), FloatWindowService.class);
                 context.stopService(intent);
@@ -52,8 +52,8 @@ public class FloatWindowBigView extends LinearLayout {
             @Override
             public void onClick(View v) {
                 // 点击返回的时候，移除大悬浮窗，创建小悬浮窗
-                MyWindowManager.removeBigWindow(context);
-                MyWindowManager.createSmallWindow(context);
+                FloatAssistantManager.removeBigWindow(context);
+                FloatAssistantManager.createSmallWindow(context);
             }
         });
     }
