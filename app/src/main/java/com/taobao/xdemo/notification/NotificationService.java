@@ -31,13 +31,12 @@ public class NotificationService extends Service {
         // 开启前台服务
 //        startForeground(1, NotificationUtils.getNotification(this));
 
-        startForeground(1, NotificationUtils.showNotification(this));
+        startForeground(111, NotificationUtils.showNotification(this));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
     }
 
 }

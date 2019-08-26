@@ -32,23 +32,6 @@ import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 public class FloatUtils {
 
     /**
-     * 打开通知
-     *
-     * @param context
-     */
-    public static void openNotification(Context context) {
-        //   NotificationUtils.showNotification(getApplicationContext());
-        Toast.makeText(context, "打开通知，开启前台服务,快看通知栏", Toast.LENGTH_SHORT).show();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //android8.0以上通过startForegroundService启动service
-            context.startForegroundService(new Intent(context, NotificationService.class));
-        } else {
-            context.startService(new Intent(context, NotificationService.class));
-        }
-    }
-
-    /**
      * 打开小助手
      *
      * @param context

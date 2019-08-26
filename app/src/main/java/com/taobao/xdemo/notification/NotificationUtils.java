@@ -6,15 +6,19 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.SystemClock;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.taobao.xdemo.FlowCustomLog;
 import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.R;
+import com.taobao.xdemo.floating.MessageManager;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
@@ -22,12 +26,39 @@ import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 /**
  * @author bill
  * @Date on 2019-08-21
- * @Desc:
+ * @Desc: 通知管理工具类
  */
 public class NotificationUtils {
 
     static final String NOTICE_ID_KEY = "NOTICE_ID";
     static final String ACTION_CLOSE_NOTICE = "cn.campusapp.action.closenotice";
+
+    /**
+     * 关闭通知
+     *
+     * @param context
+     */
+    public static void closeNotification(Context context) {
+        Toast.makeText(context, "取消通知,终止前台服务", Toast.LENGTH_SHORT).show();
+        context.stopService(new Intent(context, NotificationService.class));
+    }
+
+    /**
+     * 打开通知
+     *
+     * @param context
+     */
+    public static void openNotification(Context context) {
+        //   NotificationUtils.showNotification(getApplicationContext());
+        Toast.makeText(context, "打开通知，开启前台服务,快看通知栏", Toast.LENGTH_SHORT).show();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //android8.0以上通过startForegroundService启动service
+            context.startForegroundService(new Intent(context, NotificationService.class));
+        } else {
+            context.startService(new Intent(context, NotificationService.class));
+        }
+    }
 
     /**
      * 绘制通知
@@ -38,9 +69,12 @@ public class NotificationUtils {
     public static Notification showNotification(Context context) {
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 绘制通知");
 
-        // todo 曝光和点击事件  和push一致
+        boolean b = NotificationManagerCompat.from(context).areNotificationsEnabled();
+        FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 是否有通知权限：" + b);
+
+        // todo 曝光和点击事件
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-        builder.setSmallIcon(R.drawable.push_close);
+        builder.setSmallIcon(R.drawable.icon_circle);
         builder.setOngoing(true);
         builder.setPriority(NotificationCompat.PRIORITY_MAX);
 
@@ -52,30 +86,43 @@ public class NotificationUtils {
 
         //点击事件
         // 主会场
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intentMainPage = new Intent();
+        intentMainPage.setData(Uri.parse(MessageManager.MAIN_PAGE));
+        intentMainPage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         int requestCode = (int) SystemClock.uptimeMillis();
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCode, intentMainPage, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.iv_main_page, pendingIntent);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 跳去主会场");
 
 
         //主互动
-        Intent intent1 = new Intent(context, MainActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Intent intentCrazy = new Intent();
+        intentCrazy.setData(Uri.parse(MessageManager.MAIN_CRAZY));
+        intentCrazy.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         int requestCode1 = (int) SystemClock.uptimeMillis();
-        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, requestCode1, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, requestCode1, intentCrazy, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.iv_main_crazy, pendingIntent1);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 跳去主互动");
 
 
         //设置
+        /*int requestCode2 = (int) SystemClock.uptimeMillis();
+        Intent intentSettings = new Intent(context, NotificationBroadcastReceiver.class);
+        intentSettings.putExtra(NOTICE_ID_KEY, ACTION_CLOSE_NOTICE);
+        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(context, requestCode2, intentSettings, PendingIntent.FLAG_UPDATE_CURRENT);
+        remoteViews.setOnClickPendingIntent(R.id.tv_setting, pendingIntent2);
+        FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 关闭通知");*/
+
+
+        //设置 去我的淘宝设置页面
         int requestCode2 = (int) SystemClock.uptimeMillis();
-        Intent intent2 = new Intent(context, NotificationBroadcastReceiver.class);
-        intent2.putExtra(NOTICE_ID_KEY, ACTION_CLOSE_NOTICE);
-        PendingIntent pendingIntent2 = PendingIntent.getBroadcast(context, requestCode2, intent2, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intentSettings = new Intent();
+        intentSettings.setData(Uri.parse(MessageManager.MAIN_SETTINGS));
+        intentSettings.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, requestCode2, intentSettings, PendingIntent.FLAG_UPDATE_CURRENT);
         remoteViews.setOnClickPendingIntent(R.id.tv_setting, pendingIntent2);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 关闭通知");
+
 
         //消息通道
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
@@ -94,9 +141,7 @@ public class NotificationUtils {
 
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 设置通知布局");
         Notification notification = builder.build();
-
 //        notification.bigContentView = remoteViews;
-
         return notification;
     }
 

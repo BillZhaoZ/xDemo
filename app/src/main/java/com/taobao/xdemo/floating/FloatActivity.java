@@ -9,9 +9,11 @@ import android.os.Message;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.taobao.xdemo.R;
-import com.taobao.xdemo.notification.NotificationService;
+import com.taobao.xdemo.notification.NotificationUtils;
 
 
 public class FloatActivity extends AppCompatActivity {
@@ -36,7 +38,7 @@ public class FloatActivity extends AppCompatActivity {
         findViewById(R.id.tv_open_notification).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               FloatUtils.openNotification(getApplicationContext());
+                NotificationUtils.openNotification(getApplicationContext());
             }
         });
 
@@ -44,8 +46,8 @@ public class FloatActivity extends AppCompatActivity {
         findViewById(R.id.tv_cancle_notification).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "取消通知,终止前台服务", Toast.LENGTH_SHORT).show();
-                stopService(new Intent(FloatActivity.this, NotificationService.class));
+
+                NotificationUtils.closeNotification(getApplicationContext());
             }
         });
 

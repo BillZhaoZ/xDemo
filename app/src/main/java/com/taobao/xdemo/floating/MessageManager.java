@@ -15,13 +15,16 @@ import java.util.Calendar;
 
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 
-
 /**
  * @author bill
  * @Date on 2019-08-24
  * @Desc:
  */
 public class MessageManager {
+
+    public static final String MAIN_PAGE = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=1111.tmall.com";
+    public static final String MAIN_CRAZY = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=https%3a%2f%2fh5.m.taobao.com%2fbcec%2fdahanghai-jump.html%3fspm%3d2014.ugdhh.2200803433985.1001-5543%26bc_fl_src%3dgrowth_dhh_2200803433985_1001-5543%26activity_id%3d710&spm=2014.ugdhh.2200803433985.1001-5543&bc_fl_src=growth_dhh_2200803433985_1001-5543&materialid=1001&activity_id=710";
+    public static final String MAIN_SETTINGS = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=http://m.taobao.com/go/mytaobaocommonsettings";
 
     private Context mContext;
     private boolean isShowNewMessage; // 小助手显示时，是否有新消息到达  需要处理
@@ -85,7 +88,7 @@ public class MessageManager {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                           MyWindowManager.removeSmallWindow(mContext);
+                            MyWindowManager.removeSmallWindow(mContext);
                             MyWindowManager.removeBigWindow(mContext);
                         }
                     });
@@ -110,9 +113,9 @@ public class MessageManager {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, "快点我，8s后我就消失了，抓紧时间", Toast.LENGTH_LONG).show();
+                    Toast.makeText(mContext, "快点我，8s后我就不动了，抓紧时间点啊。。。", Toast.LENGTH_LONG).show();
 
-                   FloatWindowSmallView smallWindow = MyWindowManager.createSmallWindow(mContext);
+                    FloatWindowSmallView smallWindow = MyWindowManager.createSmallWindow(mContext);
 
                     ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(smallWindow, "rotation", 720f);
                     objectAnimator.setDuration(8000);
@@ -132,8 +135,7 @@ public class MessageManager {
 
         //小助手消失
         else if (msg.what == 3) {
-            FlowCustomLog.d(LOG_TAG, "MessageManager === handleAssMesssage === 关闭小助手");
-
+            FlowCustomLog.d(LOG_TAG, "MessageManager === handleAssMesssage === 关闭小助手消息到达");
             isDisappear = true;
 
             handler.post(new Runnable() {
@@ -175,8 +177,7 @@ public class MessageManager {
             FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 双十一当天");
 
             // 双十一当天  跳主会场
-            jumpPage(mContext, "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=1111.tmall.com");
-
+            jumpPage(mContext, MAIN_PAGE);
         } else {
             FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 其他日期："
                     + year + "年" + month + "月" + day + "号" + " " + hour + ":" + minute);
@@ -185,15 +186,13 @@ public class MessageManager {
                 FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 非双十一当天，跳转主会场  isClickMain=" + isClickMainPage);
 
                 // 主会场
-                jumpPage(mContext, "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=1111.tmall.com");
-
+                jumpPage(mContext, MAIN_PAGE);
                 isClickMainPage = !isClickMainPage;
             } else {
                 FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 非双十一当天，跳转主互动 isClickMain=" + isClickMainPage);
 
                 //主互动
-                jumpPage(mContext, "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=https%3a%2f%2fh5.m.taobao.com%2fbcec%2fdahanghai-jump.html%3fspm%3d2014.ugdhh.2200803433985.1001-5543%26bc_fl_src%3dgrowth_dhh_2200803433985_1001-5543%26activity_id%3d710&spm=2014.ugdhh.2200803433985.1001-5543&bc_fl_src=growth_dhh_2200803433985_1001-5543&materialid=1001&activity_id=710");
-
+                jumpPage(mContext, MAIN_CRAZY);
                 isClickMainPage = !isClickMainPage;
             }
 
@@ -204,6 +203,12 @@ public class MessageManager {
 //        MyWindowManager.removeSmallWindow(getContext());
     }
 
+    /**
+     * 跳转页面
+     *
+     * @param mContext
+     * @param jumpUrl
+     */
     private static void jumpPage(Context mContext, String jumpUrl) {
         Uri parse = Uri.parse(jumpUrl);
         Intent intent = new Intent();
