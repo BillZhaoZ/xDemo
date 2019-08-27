@@ -193,11 +193,32 @@ public class FloatUtils {
      */
     public static boolean checkFloatPermission(Context context) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-            FlowCustomLog.d(LOG_TAG, "FloatUtils === checkFloatPermission === 小于14版本，返回true");
+            FlowCustomLog.d(LOG_TAG, "FloatUtils === checkFloatPermission === 小于19版本，返回true");
             return true;
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //大于23
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //大于26
+
+                AppOpsManager appOpsMgr = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
+                if (appOpsMgr == null)
+                    return false;
+                int mode = appOpsMgr.checkOpNoThrow("android:system_alert_window", android.os.Process.myUid(), context
+                        .getPackageName());
+
+//                boolean b = Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED || mode == AppOpsManager.MODE_IGNORED;
+                boolean b = Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED;
+                FlowCustomLog.d(LOG_TAG, "FloatUtils === checkFloatPermission === 大于26版本，返回" + b);
+                return b;
+            } else { //23-26
+
+                boolean b = Settings.canDrawOverlays(context);
+                FlowCustomLog.d(LOG_TAG, "FloatUtils === checkFloatPermission === 大于23  小于26版本，返回" + b);
+                return b;
+            }
+
+        } else {
             try {
                 Class cls = Class.forName("android.content.Context");
                 Field declaredField = cls.getDeclaredField("APP_OPS_SERVICE");
@@ -220,28 +241,8 @@ public class FloatUtils {
             } catch (Exception e) {
                 return false;
             }
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                AppOpsManager appOpsMgr = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-                if (appOpsMgr == null)
-                    return false;
-                int mode = appOpsMgr.checkOpNoThrow("android:system_alert_window", android.os.Process.myUid(), context
-                        .getPackageName());
-
-//                boolean b = Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED || mode == AppOpsManager.MODE_IGNORED;
-                boolean b = Settings.canDrawOverlays(context) || mode == AppOpsManager.MODE_ALLOWED;
-                FlowCustomLog.d(LOG_TAG, "FloatUtils === checkFloatPermission === 大于26版本，返回" + b);
-                return b;
-            } else {
-
-                boolean b = Settings.canDrawOverlays(context);
-                FlowCustomLog.d(LOG_TAG, "FloatUtils === checkFloatPermission === 大于23  小于26版本，返回" + b);
-                return b;
-            }
         }
     }
-
 
     public static boolean isTaobaoInFront(Context context) {
 /*
@@ -268,7 +269,6 @@ public class FloatUtils {
                 break;
             }
         }
-
 
 
         boolean equals = TextUtils.equals(packageName, "com.taobao.taobao");
@@ -300,7 +300,6 @@ public class FloatUtils {
         }
         return " ";
     }
-
 
 
     /**

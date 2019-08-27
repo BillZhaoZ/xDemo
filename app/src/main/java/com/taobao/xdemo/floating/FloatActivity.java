@@ -2,6 +2,7 @@ package com.taobao.xdemo.floating;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,15 +12,22 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.notification.NotificationUtils;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import static com.taobao.xdemo.floating.MessageManager.ASSISTANT_DISAPPEAR;
 import static com.taobao.xdemo.floating.MessageManager.ASSISTANT_NEW_MSG;
 
 
+/**
+ * 小助手设置界面
+ */
 public class FloatActivity extends AppCompatActivity {
 
     private static final int REQUEST_OVERLAY = 5004;
@@ -29,15 +37,6 @@ public class FloatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_float);
-
-       /* new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                FloatUtils.startFloatService(getApplicationContext());
-
-            }
-        }, 8000);*/
-
 
         // 是否支持小助手功能
         findViewById(R.id.tv_float_accsss).setOnClickListener(new View.OnClickListener() {
@@ -74,16 +73,20 @@ public class FloatActivity extends AppCompatActivity {
         findViewById(R.id.tv_float_permission).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean b = FloatUtils.checkFloatPermission(getApplicationContext());
+              /*  boolean b = FloatUtils.checkFloatPermission(getApplicationContext());
 
-                if (b) {
+                if (false) {
                     Toast.makeText(getApplicationContext(), "已经获取到权限", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "开始获取悬浮窗权限", Toast.LENGTH_SHORT).show();
 
                     // 跳转到其他应用层之上
                     RequestOverlayPermission(getApplicationContext());
-                }
+                }*/
+
+
+                // 跳转到其他应用层之上
+                RequestOverlayPermission(getApplicationContext());
             }
         });
 
@@ -130,12 +133,41 @@ public class FloatActivity extends AppCompatActivity {
     // 动态请求悬浮窗权限   跳转到显示到其他APP 上层界面
     public void RequestOverlayPermission(Context context) {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (!Settings.canDrawOverlays(context)) {
-                String ACTION_MANAGE_OVERLAY_PERMISSION = "android.settings.action.MANAGE_OVERLAY_PERMISSION";
-                Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
-                startActivityForResult(intent, REQUEST_OVERLAY);
-            } else {
-            }
+            FlowCustomLog.d(LOG_TAG, "FloatActivity === onActivityResult === 大于23，没有权限 申请权限");
+
+            String ACTION_MANAGE_OVERLAY_PERMISSION = "android.settings.action.MANAGE_OVERLAY_PERMISSION";
+            Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+            startActivityForResult(intent, REQUEST_OVERLAY);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_OVERLAY:
+/*
+                if (FloatPermissionUtils.getFloatPermissionStatus(getApplicationContext()) == 0) {
+                    FlowCustomLog.d(LOG_TAG, "FloatActivity === onActivityResult === 授权OK");
+                } else {
+                    FlowCustomLog.d(LOG_TAG, "FloatActivity === onActivityResult === 授权失败");
+                }*/
+
+                //华为 Android 8.0系统返回结果延迟   vivo 6.0
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        if (FloatUtils.checkFloatPermission(getApplicationContext())) {
+                            FlowCustomLog.d(LOG_TAG, "FloatActivity === onActivityResult === 授权OK");
+                        } else {
+                            FlowCustomLog.d(LOG_TAG, "FloatActivity === onActivityResult === 授权失败");
+                        }
+                    }
+                }, 500);
+
+                break;
         }
     }
 

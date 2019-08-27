@@ -88,7 +88,6 @@ public class NotificationUtils {
         remoteViews.setImageViewResource(R.id.iv_setting, R.drawable.delete);
         remoteViews.setImageViewResource(R.id.iv_main_page, R.drawable.jietie);
         remoteViews.setImageViewResource(R.id.iv_main_crazy, R.drawable.hongbao);
-        remoteViews.setTextViewText(R.id.tv_title_other, "双十一小助手");
 
         /**
          * 点击事件处理

@@ -90,8 +90,8 @@ public class MessageManager {
                         }
                     });
 
-                } else if (!FloatUtils.isHome(mContext) /*&& !FloatUtils.isTaobaoInFront(mContext)*/ && FloatAssistantManager.isWindowShowing()) {
-                    // 当前界面不是桌面， 不是淘宝   且有悬浮窗显示，则移除悬浮窗。
+                } else if (!FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
+                    // 当前界面不是桌面， 且有悬浮窗显示，则移除悬浮窗。
                     // TODO  手淘在前台 是否显示小助手
 
                     handler.post(new Runnable() {
