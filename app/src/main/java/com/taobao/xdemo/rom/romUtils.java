@@ -4,7 +4,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.text.TextUtils;
 
-import com.taobao.xdemo.FlowCustomLog;
+
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import java.io.File;
 import java.io.FileInputStream;

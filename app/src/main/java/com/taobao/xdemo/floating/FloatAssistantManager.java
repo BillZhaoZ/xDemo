@@ -6,8 +6,8 @@ import android.os.Build;
 import android.view.Gravity;
 import android.view.WindowManager;
 
-import com.taobao.xdemo.FlowCustomLog;
 import com.taobao.xdemo.notification.MessageData;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import java.util.HashMap;
 

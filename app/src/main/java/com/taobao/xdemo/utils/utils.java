@@ -1,4 +1,4 @@
-package com.taobao.xdemo;
+package com.taobao.xdemo.utils;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 
 

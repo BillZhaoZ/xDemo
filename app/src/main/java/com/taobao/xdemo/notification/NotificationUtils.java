@@ -15,13 +15,12 @@ import android.widget.Toast;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.taobao.xdemo.FlowCustomLog;
-import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.R;
-import com.taobao.xdemo.floating.MessageManager;
 import com.taobao.xdemo.floating.TrackUtils;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import java.util.HashMap;
+
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
@@ -87,8 +86,9 @@ public class NotificationUtils {
         // 自定义布局
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_bar);
         remoteViews.setImageViewResource(R.id.iv_setting, R.drawable.delete);
-        remoteViews.setImageViewResource(R.id.iv_main_page, R.drawable.share);
-        remoteViews.setImageViewResource(R.id.iv_main_crazy, R.drawable.pic);
+        remoteViews.setImageViewResource(R.id.iv_main_page, R.drawable.jietie);
+        remoteViews.setImageViewResource(R.id.iv_main_crazy, R.drawable.hongbao);
+        remoteViews.setTextViewText(R.id.tv_title_other, "双十一小助手");
 
         /**
          * 点击事件处理

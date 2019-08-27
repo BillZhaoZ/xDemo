@@ -9,8 +9,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.widget.Toast;
 
-import com.taobao.xdemo.FlowCustomLog;
 import com.taobao.xdemo.notification.MessageData;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -24,6 +24,7 @@ import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
  */
 public class MessageManager {
 
+    // todo 此处是否需要交给统跳？？？
     public static final String MAIN_PAGE = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=1111.tmall.com";
     public static final String MAIN_CRAZY = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=https%3a%2f%2fh5.m.taobao.com%2fbcec%2fdahanghai-jump.html%3fspm%3d2014.ugdhh.2200803433985.1001-5543%26bc_fl_src%3dgrowth_dhh_2200803433985_1001-5543%26activity_id%3d710&spm=2014.ugdhh.2200803433985.1001-5543&bc_fl_src=growth_dhh_2200803433985_1001-5543&materialid=1001&activity_id=710";
     public static final String MAIN_SETTINGS = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=http%3A%2F%2Fm.taobao.com%2Fgo%2Fmytaobaocommonsettings";
@@ -31,7 +32,10 @@ public class MessageManager {
     private Context mContext;
     private boolean isShowNewMessage; // 小助手显示时，是否有新消息到达  需要处理
     private boolean isDisappear; // 小助手消失
-    public static boolean isClickMainPage; //是否是点击去往主会场
+
+    public static final int ASSISTANT_SHOW = 1;
+    public static final int ASSISTANT_NEW_MSG = 2;
+    public static final int ASSISTANT_DISAPPEAR = 3;
 
     public static MessageManager instance() {
         return SingletonHolder.instance;
@@ -68,7 +72,7 @@ public class MessageManager {
     private void handleAssMesssage(Message msg) {
 
         // 显示小助手
-        if (msg.what == 1) {
+        if (msg.what == ASSISTANT_SHOW) {
             FlowCustomLog.d(LOG_TAG, "MessageManager === handleMessage === 绘制小助手");
 
             //  小助手没有新消息   小助手不消失
@@ -85,8 +89,10 @@ public class MessageManager {
                             FloatAssistantManager.createSmallWindow(mContext, new MessageData());
                         }
                     });
-                } else if (!FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
-                    // 当前界面不是桌面，且有悬浮窗显示，则移除悬浮窗。
+
+                } else if (!FloatUtils.isHome(mContext) /*&& !FloatUtils.isTaobaoInFront(mContext)*/ && FloatAssistantManager.isWindowShowing()) {
+                    // 当前界面不是桌面， 不是淘宝   且有悬浮窗显示，则移除悬浮窗。
+                    // TODO  手淘在前台 是否显示小助手
 
                     handler.post(new Runnable() {
                         @Override
@@ -95,6 +101,7 @@ public class MessageManager {
                             FloatAssistantManager.removeBigWindow(mContext);
                         }
                     });
+
                 } else if (FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
                     // 当前界面是桌面，且有悬浮窗显示，则更新内存数据。
                     handler.post(new Runnable() {
@@ -108,7 +115,7 @@ public class MessageManager {
         }
 
         //消息到了，显示小助手  做个动画   交互态期间，点击跳转指定页面
-        else if (msg.what == 2) {
+        else if (msg.what == ASSISTANT_NEW_MSG) {
             Object obj = msg.obj;
             FlowCustomLog.d(LOG_TAG, "MessageManager === handleAssMesssage === 新消息来啦,来个动画: obj=" + obj);
             isShowNewMessage = true;
@@ -138,7 +145,7 @@ public class MessageManager {
         }
 
         //小助手消失
-        else if (msg.what == 3) {
+        else if (msg.what == ASSISTANT_DISAPPEAR) {
             FlowCustomLog.d(LOG_TAG, "MessageManager === handleAssMesssage === 关闭小助手消息到达");
             isDisappear = true;
 
@@ -190,25 +197,9 @@ public class MessageManager {
             FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 其他日期："
                     + year + "年" + month + "月" + day + "号" + " " + hour + ":" + minute);
 
-            if (isClickMainPage) {
-                FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 非双十一当天，跳转主会场  isClickMain=" + isClickMainPage);
-
-                // 主会场
-                jumpPage(mContext, MAIN_PAGE);
-                isClickMainPage = !isClickMainPage;
-            } else {
-                FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 非双十一当天，跳转主互动 isClickMain=" + isClickMainPage);
-
-                //主互动
-                jumpPage(mContext, MAIN_CRAZY);
-                isClickMainPage = !isClickMainPage;
-            }
-
-            FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 非双十一当天，跳转后 isClickMain=" + isClickMainPage);
+            //主互动
+            jumpPage(mContext, MAIN_CRAZY);
         }
-
-//        FloatAssistantManager.createBigWindow(getContext());
-//        FloatAssistantManager.removeSmallWindow(getContext());
     }
 
     /**

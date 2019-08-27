@@ -8,12 +8,14 @@ import android.os.Message;
 
 import androidx.annotation.Nullable;
 
-import com.taobao.xdemo.FlowCustomLog;
+
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
+import static com.taobao.xdemo.floating.MessageManager.ASSISTANT_SHOW;
 
 /**
  * @author bill
@@ -71,7 +73,7 @@ public class FloatWindowService extends Service {
         public void run() {
             // 发送小助手的绘制消息
             Message message = new Message();
-            message.what = 1;
+            message.what = ASSISTANT_SHOW;
             MessageManager.instance().getHandler(mContext).sendMessage(message);
         }
     }

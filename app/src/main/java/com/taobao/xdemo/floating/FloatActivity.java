@@ -16,6 +16,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.notification.NotificationUtils;
 
+import static com.taobao.xdemo.floating.MessageManager.ASSISTANT_DISAPPEAR;
+import static com.taobao.xdemo.floating.MessageManager.ASSISTANT_NEW_MSG;
+
 
 public class FloatActivity extends AppCompatActivity {
 
@@ -105,7 +108,7 @@ public class FloatActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 Message message = new Message();
-                message.what = 2;
+                message.what = ASSISTANT_NEW_MSG;
                 message.obj = "wwww.taobao.com";
                 MessageManager.instance().getHandler(getApplicationContext()).sendMessage(message);
             }
@@ -118,7 +121,7 @@ public class FloatActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "关闭小助手服务，下次再见喽", Toast.LENGTH_SHORT).show();
 
                 Message message = new Message();
-                message.what = 3;
+                message.what = ASSISTANT_DISAPPEAR;
                 MessageManager.instance().getHandler(getApplicationContext()).sendMessage(message);
             }
         });

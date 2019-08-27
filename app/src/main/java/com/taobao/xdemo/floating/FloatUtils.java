@@ -12,10 +12,11 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.taobao.xdemo.FlowCustomLog;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -240,6 +241,67 @@ public class FloatUtils {
             }
         }
     }
+
+
+    public static boolean isTaobaoInFront(Context context) {
+/*
+        ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> rti = mActivityManager.getRunningTasks(1);
+        String packageName = rti.get(0).topActivity.getPackageName();*/
+
+//        String packageName = getTopActivityPackageName(context);
+
+
+      /*  ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        String packageName = activityManager.getRunningTasks(2).get(0).topActivity.getPackageName();*/
+
+        String packageName = "";
+
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> infoList = manager.getRunningTasks(2);
+        for (ActivityManager.RunningTaskInfo info : infoList) {
+            //获取上一个任务集合，是什么
+            if (!info.baseActivity.getPackageName().equals(context.getPackageName())) {
+
+                packageName = info.baseActivity.getPackageName();
+
+                break;
+            }
+        }
+
+
+
+        boolean equals = TextUtils.equals(packageName, "com.taobao.taobao");
+
+        return equals;
+    }
+
+
+    public static String getTopActivityPackageName(Context context) {
+        final int PROCESS_STATE_TOP = 2;
+        try {
+            //通过反射获取私有成员变量processState，稍后需要判断该变量的值
+            Field processStateField = ActivityManager.RunningAppProcessInfo.class.getDeclaredField("processState");
+            List<ActivityManager.RunningAppProcessInfo> processes = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getRunningAppProcesses();
+            for (ActivityManager.RunningAppProcessInfo process : processes) {
+                //判断进程是否为前台进程
+                if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
+                    int state = processStateField.getInt(process);
+                    //processState值为2
+                    if (state == PROCESS_STATE_TOP) {
+                        String[] packageName = process.pkgList;
+                        Log.d("wujiang", "getLollipopRecentTask: packageName = " + packageName[0]);
+                        return packageName[0];
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return " ";
+    }
+
+
 
     /**
      * 判断当前界面是否是桌面

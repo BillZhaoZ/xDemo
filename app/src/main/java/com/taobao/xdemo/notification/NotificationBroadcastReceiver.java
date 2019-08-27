@@ -5,10 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.taobao.xdemo.FlowCustomLog;
 import com.taobao.xdemo.floating.FloatUtils;
 import com.taobao.xdemo.floating.MessageManager;
 import com.taobao.xdemo.floating.TrackUtils;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 import static com.taobao.xdemo.notification.NotificationUtils.ACTION_CLOSE_NOTICE;

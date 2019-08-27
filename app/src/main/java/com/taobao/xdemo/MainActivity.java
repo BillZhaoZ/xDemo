@@ -13,7 +13,7 @@ import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 
-import static com.taobao.xdemo.utils.addShortcut;
+import static com.taobao.xdemo.utils.utils.addShortcut;
 
 public class MainActivity extends AppCompatActivity {
 

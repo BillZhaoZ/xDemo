@@ -9,10 +9,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
-import com.taobao.xdemo.FlowCustomLog;
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.notification.MessageData;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import java.lang.reflect.Field;
 
@@ -96,6 +97,7 @@ public class FloatWindowSmallView extends LinearLayout {
         viewWidth = mView.getLayoutParams().width;
         viewHeight = mView.getLayoutParams().height;
 
+
         // 获取屏幕宽高
         DisplayMetrics outMetrics = new DisplayMetrics();
         windowManager.getDefaultDisplay().getMetrics(outMetrics);
@@ -138,7 +140,7 @@ public class FloatWindowSmallView extends LinearLayout {
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
                     // todo 待更换  new MessageData()
-                    MessageManager.instance().performClick(mContext,new MessageData());
+                    MessageManager.instance().performClick(mContext, new MessageData());
                 }
 
                 //这里做动画贴边效果
@@ -159,11 +161,13 @@ public class FloatWindowSmallView extends LinearLayout {
 
                 FlowCustomLog.d(LOG_TAG, "centerX = " + centerX + " halfOfScreenWidth = " + halfOfScreenWidth + "  mScreenWidth =" + mScreenWidth + "   viewWidth" + viewWidth);
 
-                if (xInScreen < halfOfScreenWidth) { //左边
+               /* if (xInScreen < halfOfScreenWidth) { //左边
                     xInScreen = 0;
                 } else { //右边
                     xInScreen = xInScreen + halfOfScreenWidth;
-                }
+                }*/
+
+                xInScreen = xInScreen + mScreenWidth;
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -176,9 +180,9 @@ public class FloatWindowSmallView extends LinearLayout {
             default:
                 break;
         }
+
         return true;
     }
-
 
     /**
      * 将小悬浮窗的参数传入，用于更新小悬浮窗的位置。
