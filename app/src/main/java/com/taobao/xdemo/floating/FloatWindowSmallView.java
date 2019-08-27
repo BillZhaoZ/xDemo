@@ -1,5 +1,6 @@
 package com.taobao.xdemo.floating;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
@@ -147,7 +148,7 @@ public class FloatWindowSmallView extends LinearLayout {
                 float centerX = event.getRawX() + getWidth() / 2f;
                 float halfOfScreenWidth = mScreenWidth / 2f;
 
-              /*  if (centerX > halfOfScreenWidth) {
+                /*if (centerX > halfOfScreenWidth) {
                     ObjectAnimator.ofFloat(this, "translationX", xInScreen, mScreenWidth - getWidth() - 200)
                             .setDuration(2500)
                             .start();
@@ -159,14 +160,8 @@ public class FloatWindowSmallView extends LinearLayout {
                     FlowCustomLog.d(LOG_TAG, "centerX = cccccc");
                 }*/
 
+
                 FlowCustomLog.d(LOG_TAG, "centerX = " + centerX + " halfOfScreenWidth = " + halfOfScreenWidth + "  mScreenWidth =" + mScreenWidth + "   viewWidth" + viewWidth);
-
-               /* if (xInScreen < halfOfScreenWidth) { //左边
-                    xInScreen = 0;
-                } else { //右边
-                    xInScreen = xInScreen + halfOfScreenWidth;
-                }*/
-
                 xInScreen = xInScreen + mScreenWidth;
 
                 new Handler().postDelayed(new Runnable() {

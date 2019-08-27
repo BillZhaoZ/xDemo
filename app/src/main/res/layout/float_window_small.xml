@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/small_window_layout"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_bubble"
-        android:layout_width="130dp"
-        android:layout_height="30dp"
-        android:background="@drawable/fubiao" />
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/iv_cat"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
-        android:background="@drawable/xiaomao"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/tv_bubble"
+        android:layout_marginLeft="50dp"
         android:gravity="center"
-        android:scaleType="fitCenter"
-        android:textColor="#ffffff"
-        android:layout_marginLeft="70dp"
+        android:scaleType="fitXY"
+        android:src="@mipmap/float_cat"
         android:textSize="12sp" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_bubble"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="@mipmap/float_bubble"
+        android:gravity="center_vertical"
+        android:maxLines="2"
+        android:text="您有一个红包快去领取"
+        android:textColor="@android:color/black"
+        android:textSize="10sp"
+        android:visibility="visible" />
+
+</RelativeLayout>
