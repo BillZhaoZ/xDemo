@@ -18,6 +18,7 @@ import static com.taobao.xdemo.notification.NotificationUtils.NOTICE_ID_KEY;
 
 /**
  * 接收pendingintent广播
+ * 处理自定义事件
  */
 public class NotificationBroadcastReceiver extends BroadcastReceiver {
 

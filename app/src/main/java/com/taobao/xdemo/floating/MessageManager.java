@@ -10,8 +10,10 @@ import android.os.Message;
 import android.widget.Toast;
 
 import com.taobao.xdemo.FlowCustomLog;
+import com.taobao.xdemo.notification.MessageData;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 
@@ -78,7 +80,9 @@ public class MessageManager {
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            FloatAssistantManager.createSmallWindow(mContext);
+
+                            // todo 待更换  new MessageData()
+                            FloatAssistantManager.createSmallWindow(mContext, new MessageData());
                         }
                     });
                 } else if (!FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
@@ -114,7 +118,8 @@ public class MessageManager {
                 public void run() {
                     Toast.makeText(mContext, "快点我，8s后我就不动了，抓紧时间点啊。。。", Toast.LENGTH_LONG).show();
 
-                    FloatWindowSmallView smallWindow = FloatAssistantManager.createSmallWindow(mContext);
+                    // todo 待更换  new MessageData()
+                    FloatWindowSmallView smallWindow = FloatAssistantManager.createSmallWindow(mContext, new MessageData());
 
                     ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(smallWindow, "rotation", 720f);
                     objectAnimator.setDuration(8000);
@@ -140,7 +145,8 @@ public class MessageManager {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    FloatWindowSmallView smallWindow = FloatAssistantManager.createSmallWindow(mContext);
+                    // todo 待更换  new MessageData()
+                    FloatWindowSmallView smallWindow = FloatAssistantManager.createSmallWindow(mContext, new MessageData());
 
                     ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(smallWindow, "rotation", 720f);
                     objectAnimator.setDuration(2000);
@@ -156,9 +162,12 @@ public class MessageManager {
     /**
      * 打开大悬浮窗，同时关闭小悬浮窗。
      */
-    void performClick(Context mContext) {
+    void performClick(Context mContext, MessageData messageData) {
         Toast.makeText(mContext, "点我干啥，我要跳页面了", Toast.LENGTH_SHORT).show();
         FlowCustomLog.d(LOG_TAG, "FloatWindowSmallView === performClick === 打开大悬浮窗，同时关闭小悬浮窗");
+
+        // 点击事件
+        TrackUtils.sendFloatData(TrackUtils.ARG1_ASSISTANT_CLICK, messageData.ladningUrl, "", new HashMap<String, String>());
 
         Calendar cal = Calendar.getInstance();// 当前日期
         int year = cal.get(Calendar.YEAR);

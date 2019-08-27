@@ -28,7 +28,7 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        // 开启前台服务
+        // 开启前台服务   todo 待更换  new MessageData()
         startForeground(111, NotificationUtils.showNotification(this, new MessageData()));
     }
 

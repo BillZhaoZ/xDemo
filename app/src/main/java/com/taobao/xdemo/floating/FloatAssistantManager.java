@@ -7,6 +7,9 @@ import android.view.Gravity;
 import android.view.WindowManager;
 
 import com.taobao.xdemo.FlowCustomLog;
+import com.taobao.xdemo.notification.MessageData;
+
+import java.util.HashMap;
 
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 
@@ -46,7 +49,10 @@ public class FloatAssistantManager {
      *
      * @param context 必须为应用程序的Context.
      */
-    public static FloatWindowSmallView createSmallWindow(Context context) {
+    public static FloatWindowSmallView createSmallWindow(Context context, MessageData messageData) {
+        // 曝光事件
+        TrackUtils.sendFloatData(TrackUtils.ARG1_ASSISTANT_EXPOSE, messageData.ladningUrl, "", new HashMap<String, String>());
+
         WindowManager windowManager = getWindowManager(context);
 
         int screenWidth = windowManager.getDefaultDisplay().getWidth();

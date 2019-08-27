@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.taobao.xdemo.FlowCustomLog;
 import com.taobao.xdemo.R;
+import com.taobao.xdemo.notification.MessageData;
 
 import java.lang.reflect.Field;
 
@@ -136,7 +137,8 @@ public class FloatWindowSmallView extends LinearLayout {
             case MotionEvent.ACTION_UP:
                 // 如果手指离开屏幕时，xDownInScreen和xInScreen相等，且yDownInScreen和yInScreen相等，则视为触发了单击事件。
                 if (xDownInScreen == xInScreen && yDownInScreen == yInScreen) {
-                    MessageManager.instance().performClick(mContext);
+                    // todo 待更换  new MessageData()
+                    MessageManager.instance().performClick(mContext,new MessageData());
                 }
 
                 //这里做动画贴边效果

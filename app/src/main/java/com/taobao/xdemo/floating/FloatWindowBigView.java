@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import com.taobao.xdemo.R;
-
+import com.taobao.xdemo.notification.MessageData;
 
 /**
  * @author bill
@@ -53,7 +53,7 @@ public class FloatWindowBigView extends LinearLayout {
             public void onClick(View v) {
                 // 点击返回的时候，移除大悬浮窗，创建小悬浮窗
                 FloatAssistantManager.removeBigWindow(context);
-                FloatAssistantManager.createSmallWindow(context);
+                FloatAssistantManager.createSmallWindow(context, new MessageData());
             }
         });
     }

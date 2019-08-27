@@ -9,11 +9,12 @@ import java.util.Map;
 public class TrackUtils {
 
     // 业务埋点
-    public  static final String ARG1_NOTIFICATION_EXPOSE = "notification_expose";   // 通知栏曝光事件
-    public  static final String ARG1_NOTIFICATION_A_CLICK = "notification_A_click"; // 通知栏A区域点击事件
-    public  static final String ARG1_NOTIFICATION_B_CLICK = "notification_B_click"; // 通知栏B区域点击事件
-    public  static final String ARG1_NOTIFICATION_DELETE_CLICK = "notification_delete_click"; // 通知栏取消按钮点击事件
-
+    public static final String ARG1_NOTIFICATION_EXPOSE = "notification_expose";   // 通知栏曝光事件
+    public static final String ARG1_NOTIFICATION_A_CLICK = "notification_A_click"; // 通知栏A区域点击事件
+    public static final String ARG1_NOTIFICATION_B_CLICK = "notification_B_click"; // 通知栏B区域点击事件
+    public static final String ARG1_NOTIFICATION_DELETE_CLICK = "notification_delete_click"; // 通知栏取消按钮点击事件
+    public static final String ARG1_ASSISTANT_EXPOSE = "assistant_expose";          // 小助手曝光事件
+    public static final String ARG1_ASSISTANT_CLICK = "assistant_click";            // 小助手点击事件
 
 
     // 性能埋点
