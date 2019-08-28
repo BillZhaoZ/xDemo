@@ -1,14 +1,20 @@
 package com.taobao.xdemo.floating;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -145,23 +151,20 @@ public class FloatWindowSmallView extends LinearLayout {
                 }
 
                 //这里做动画贴边效果
-                float centerX = event.getRawX() + getWidth() / 2f;
-                float halfOfScreenWidth = mScreenWidth / 2f;
 
-                /*if (centerX > halfOfScreenWidth) {
-                    ObjectAnimator.ofFloat(this, "translationX", xInScreen, mScreenWidth - getWidth() - 200)
-                            .setDuration(2500)
-                            .start();
-                    FlowCustomLog.d(LOG_TAG, "centerX = aaaaa");
-                } else {
-                    ObjectAnimator.ofFloat(this, "translationX", xInScreen, 0)
-                            .setDuration(2500)
-                            .start();
-                    FlowCustomLog.d(LOG_TAG, "centerX = cccccc");
-                }*/
+               /* ObjectAnimator.ofFloat(this, "translationX", xInScreen, mScreenWidth - viewWidth)
+                        .setDuration(2500)
+                        .start();*/
 
+/*
+                TranslateAnimation animation = new TranslateAnimation(0, 1000, 0, 0);
+                animation.setDuration(3000);
+                animation.setFillAfter(true);
+                mView.startAnimation(animation);
+*/
 
-                FlowCustomLog.d(LOG_TAG, "centerX = " + centerX + " halfOfScreenWidth = " + halfOfScreenWidth + "  mScreenWidth =" + mScreenWidth + "   viewWidth" + viewWidth);
+                FlowCustomLog.d(LOG_TAG, "xInScreen=" + xInScreen + "  yInScreen=" + yInScreen + "  mScreenWidth - viewWidth=" + (mScreenWidth - viewWidth) + "");
+
                 xInScreen = xInScreen + mScreenWidth;
 
                 new Handler().postDelayed(new Runnable() {
@@ -171,6 +174,7 @@ public class FloatWindowSmallView extends LinearLayout {
                     }
                 }, 100);
 
+
                 break;
             default:
                 break;
@@ -178,6 +182,7 @@ public class FloatWindowSmallView extends LinearLayout {
 
         return true;
     }
+
 
     /**
      * 将小悬浮窗的参数传入，用于更新小悬浮窗的位置。

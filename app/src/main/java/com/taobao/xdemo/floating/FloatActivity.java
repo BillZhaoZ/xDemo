@@ -2,20 +2,16 @@ package com.taobao.xdemo.floating;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.notification.NotificationUtils;
@@ -32,11 +28,13 @@ public class FloatActivity extends AppCompatActivity {
 
     private static final int REQUEST_OVERLAY = 5004;
     public static final String LOG_TAG = "double11";
+    private static final String TAG = "double11";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_float);
+
 
         // 是否支持小助手功能
         findViewById(R.id.tv_float_accsss).setOnClickListener(new View.OnClickListener() {
