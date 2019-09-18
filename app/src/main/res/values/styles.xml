@@ -9,18 +9,19 @@
     </style>
 
 
+    <!--  &lt;!&ndash;继承Theme.AppCompat.NoActionBar，不显示标题栏&ndash;&gt;
+      <style name="TransparentTheme" parent="Theme.AppCompat.NoActionBar">
+          <item name="android:windowExitAnimation">@null</item>
+          <item name="android:windowNoTitle">true</item>
+          <item name="android:windowContentOverlay">@null</item>
+          <item name="android:windowBackground">@color/accessibility_transparent</item>
+          <item name="android:windowIsTranslucent">true</item>
+      </style>-->
 
-    <style name="Accessibility.Transparent.Activity" parent="android:Theme">
+    <!--继承Theme.AppCompat.NoActionBar，不显示标题栏-->
+    <style name="TransparentTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/accessibility_transparent</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowAnimationStyle">@style/accessibility_super_guide</item>
-    </style>
-    <style name="accessibility_super_guide">
-        <item name="android:activityOpenEnterAnimation">@anim/accessibility_bottom_in</item>
-        <item name="android:activityOpenExitAnimation">@null</item>
-        <item name="android:activityCloseEnterAnimation">@null</item>
-        <item name="android:activityCloseExitAnimation">@anim/accessibility_bottom_out</item>
     </style>
 
 </resources>

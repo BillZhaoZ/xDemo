@@ -7,6 +7,24 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv_transparebt"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="透明页面测试"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_show_pop"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="显示小把手"
+        android:visibility="visible" />
+
+    <TextView
         android:id="@+id/tv_add_shortcut"
         android:layout_width="wrap_content"
         android:layout_height="35dp"

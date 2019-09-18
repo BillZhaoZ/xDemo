@@ -36,6 +36,7 @@ public class NotificationUtils {
     static final String ACTION_CLOSE_NOTICE = "cn.campusapp.action.closenotice";
     static final String BROADCAST_FLAG = "flag";
     static final String LANDINGURL = "landingUrl";
+    private static RemoteViews sRemoteViews;
 
     /**
      * 关闭通知
@@ -84,24 +85,24 @@ public class NotificationUtils {
         builder.setPriority(NotificationCompat.PRIORITY_MAX);
 
         // 自定义布局
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_bar);
-        remoteViews.setImageViewResource(R.id.iv_setting, R.drawable.delete);
-        remoteViews.setImageViewResource(R.id.iv_main_page, R.drawable.jietie);
-        remoteViews.setImageViewResource(R.id.iv_main_crazy, R.drawable.hongbao);
+        sRemoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_bar);
+        sRemoteViews.setImageViewResource(R.id.iv_setting, R.drawable.delete);
+        sRemoteViews.setImageViewResource(R.id.iv_main_page, R.drawable.jietie);
+        sRemoteViews.setImageViewResource(R.id.iv_main_crazy, R.drawable.hongbao);
 
         /**
          * 点击事件处理
          */
         // 主会场
-        setIntent(context, messageData, remoteViews, "1", R.id.iv_main_page);
+        setIntent(context, messageData, sRemoteViews, "1", R.id.iv_main_page);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 跳去主会场");
 
         //主互动
-        setIntent(context, messageData, remoteViews, "2", R.id.iv_main_crazy);
+        setIntent(context, messageData, sRemoteViews, "2", R.id.iv_main_crazy);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 跳去主互动");
 
         //设置 去我的淘宝设置页面
-        setIntent(context, messageData, remoteViews, "3", R.id.iv_setting);
+        setIntent(context, messageData, sRemoteViews, "3", R.id.iv_setting);
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 关闭通知");
 
         //消息通道
@@ -117,7 +118,7 @@ public class NotificationUtils {
             FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 设置通知channel");
         }
 
-        builder.setCustomContentView(remoteViews);
+        builder.setCustomContentView(sRemoteViews);
 
         FlowCustomLog.d(LOG_TAG, "NotificationUtils === showNotification === 设置通知布局");
         Notification notification = builder.build();
@@ -154,12 +155,17 @@ public class NotificationUtils {
      * @param openURL
      */
     public static void jumpClick(Context context, String landingUrl, String arg1, String openURL) {
+
+        sRemoteViews.setImageViewResource(R.id.iv_setting, R.drawable.icon);
+
+
+/*
         TrackUtils.sendFloatData(arg1, landingUrl, "", new HashMap<String, String>());
 
         Intent intent = new Intent();
         intent.setData(Uri.parse(openURL));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        context.startActivity(intent);
+        context.startActivity(intent);*/
 
         FlowCustomLog.d(LOG_TAG, "NotificationBroadcastReceiver === jumpClick === arg1=" + arg1 + " openURL=" + openURL);
     }

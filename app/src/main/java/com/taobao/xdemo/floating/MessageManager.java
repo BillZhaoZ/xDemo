@@ -26,7 +26,7 @@ public class MessageManager {
 
     // todo 此处是否需要交给统跳？？？
     public static final String MAIN_PAGE = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=1111.tmall.com";
-    public static final String MAIN_CRAZY = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=https%3a%2f%2fh5.m.taobao.com%2fbcec%2fdahanghai-jump.html%3fspm%3d2014.ugdhh.2200803433985.1001-5543%26bc_fl_src%3dgrowth_dhh_2200803433985_1001-5543%26activity_id%3d710&spm=2014.ugdhh.2200803433985.1001-5543&bc_fl_src=growth_dhh_2200803433985_1001-5543&materialid=1001&activity_id=710";
+    public static final String MAIN_CRAZY = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=https%3A%2F%2Fmain.m.taobao.com%2Fdetail%2Findex.html%3Fid%3D592234074086%26alipay2taoBanner%3D10.0%26alipay2TaoBanner%3D10.0";
     public static final String MAIN_SETTINGS = "tbopen://m.taobao.com/tbopen/index.html?source=auto&action=ali.open.nav&module=h5&h5Url=http%3A%2F%2Fm.taobao.com%2Fgo%2Fmytaobaocommonsettings";
 
     private Context mContext;

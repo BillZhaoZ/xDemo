@@ -28,7 +28,4 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-
-//    implementation(name:'mtopsdk_allinone_open-3.1.2.5', ext:'jar')
-//    implementation 'com.taobao.android:mtopsdk_allinone_open:3.1.2.5@jar'
 }

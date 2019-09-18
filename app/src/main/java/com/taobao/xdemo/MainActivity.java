@@ -1,26 +1,76 @@
 package com.taobao.xdemo;
 
+import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
+import com.taobao.xdemo.utils.FlowCustomLog;
 
 import static com.taobao.xdemo.utils.utils.addShortcut;
 
 public class MainActivity extends AppCompatActivity {
 
+    /*显示提示框按钮*/
+    private Button showTips;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        String imei = getIMEI(this);
+//        Log.e("Testy",imei);
+
+        findViewById(R.id.tv_transparebt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RequestOverlayPermission(getApplicationContext());
+//                startActivity(new Intent(getApplicationContext(), Main3Activity.class));
+
+                new Handler(Looper.myLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        startActivity(new Intent(getApplicationContext(), Main3Activity.class));
+                    }
+                }, 0);
+
+            }
+        });
+
+//        createAndStart();
+
+        findViewById(R.id.tv_show_pop).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showView();
+            }
+        });
 
         findViewById(R.id.tv_add_shortcut).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,5 +123,88 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void showView() {
+        createAndStart();
+    }
+
+    /**
+     * 创建View并启动动画
+     */
+    @SuppressLint("InflateParams")
+    private void createAndStart() {
+        /*创建提示消息View*/
+        final View view = LayoutInflater.from(this).inflate(R.layout.view_top_msg, null);
+        /*创建属性动画,从下到上*/
+        ObjectAnimator bottomToTop = ObjectAnimator.ofFloat(view, "translationY", 0, -dp2px(80)).setDuration(500);
+        /*创建属性动画,从上到下*/
+        ObjectAnimator topToBottom = ObjectAnimator.ofFloat(view, "translationY", -dp2px(80), 0).setDuration(500);
+        /*初始化动画组合器*/
+        AnimatorSet animator = new AnimatorSet();
+        /*组合动画*/
+        animator.play(bottomToTop).after(topToBottom).after(2000);
+        /*添加动画结束回调*/
+        animator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                /*删除View*/
+                App.instance().hideView(view);
+            }
+        });
+
+        /*添加View到当前显示的Activity*/
+        App.instance().showView(view);
+
+        /*启动动画*/
+        animator.start();
+    }
+
+    /**
+     * 从dp单位转换为px
+     *
+     * @param dp dp值
+     * @return 返回转换后的px值
+     */
+    private int dp2px(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
+
+    /**
+     * 动态请求悬浮窗权限   跳转到显示到其他APP 上层界面
+     *
+     * @param context
+     */
+    public void RequestOverlayPermission(Context context) {
+        if (Build.VERSION.SDK_INT >= 23) {
+
+            String ACTION_MANAGE_OVERLAY_PERMISSION = "android.settings.action.MANAGE_OVERLAY_PERMISSION";
+            Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+            startActivityForResult(intent, 5004);
+        }
+    }
+
+    private static String sReadPhoneState = Manifest.permission.READ_PHONE_STATE;
+
+
+    public static String getIMEI(Context context) {
+        if (context == null) {
+            return "";
+        }
+
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(context, sReadPhoneState) == PackageManager.PERMISSION_GRANTED) {
+                return telephonyManager.getDeviceId();
+            } else {
+                ActivityCompat.requestPermissions((Activity) context, new String[]{sReadPhoneState}, 122);
+            }
+        } catch (Exception e) {
+
+        }
+
+        return "";
     }
 }

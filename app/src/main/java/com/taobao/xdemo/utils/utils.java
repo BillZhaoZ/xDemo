@@ -1,5 +1,10 @@
 package com.taobao.xdemo.utils;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -11,11 +16,16 @@ import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
+import com.taobao.xdemo.App;
 import com.taobao.xdemo.MainActivity;
+import com.taobao.xdemo.R;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 
 
@@ -29,6 +39,7 @@ public class utils {
     public static final String ACTION_ADD_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
     public static final String ACTION_REMOVE_SHORTCUT = "com.android.launcher.action.UNINSTALL_SHORTCUT";
     private static final String mPinShortcutId = "hankinhui_shortcut";
+    private android.widget.LinearLayout viewtopmsgparent;
 
 
     // https://www.cnblogs.com/mengdd/p/3837592.html
@@ -126,5 +137,14 @@ public class utils {
 
         // 发送广播
         context.sendBroadcast(intent);
+    }
+
+    /**
+     * 创建View并启动动画
+     */
+    public static View getView(Context context) {
+        /*创建提示消息View*/
+        View view = LayoutInflater.from(context).inflate(R.layout.view_top_msg, null);
+        return view;
     }
 }

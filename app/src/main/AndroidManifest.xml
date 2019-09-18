@@ -4,6 +4,7 @@
     package="com.taobao.xdemo">
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -11,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,7 +20,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".smartlink.SnartLinkActivity"
             android:exported="true" />
@@ -30,22 +31,27 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".Main3Activity"
+            android:theme="@style/TransparentTheme"/>
+
+
         <service android:name=".floating.FloatWindowService" />
         <service android:name=".notification.NotificationService" />
-
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 添加快捷方式 -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 移除快捷方式 -->
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /> <!-- 查询快捷方式 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 添加快捷方式 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 移除快捷方式 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 查询快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="app.custom.permission" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
 </manifest>

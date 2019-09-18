@@ -1,22 +1,14 @@
 package com.taobao.xdemo.floating;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.Handler;
-import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.notification.MessageData;
