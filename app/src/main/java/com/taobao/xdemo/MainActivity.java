@@ -39,13 +39,10 @@ public class MainActivity extends AppCompatActivity {
     /*显示提示框按钮*/
     private Button showTips;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        String imei = getIMEI(this);
-//        Log.e("Testy",imei);
 
         findViewById(R.id.tv_transparebt).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        createAndStart();
+        createAndStart();
 
         findViewById(R.id.tv_show_pop).setOnClickListener(new View.OnClickListener() {
             @Override

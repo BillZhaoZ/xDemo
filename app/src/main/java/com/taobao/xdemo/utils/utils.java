@@ -15,9 +15,14 @@ import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Trace;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -142,9 +147,87 @@ public class utils {
     /**
      * 创建View并启动动画
      */
-    public static View getView(Context context) {
-        /*创建提示消息View*/
-        View view = LayoutInflater.from(context).inflate(R.layout.view_top_msg, null);
+    public static View getView(final Context context) {
+        final View view = LayoutInflater.from(context).inflate(R.layout.view_top_msg, null);
+
+        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, 900, 0, 0);
+        view.setLayoutParams(layoutParams);
+
+        final int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
+        final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+
+        view.setOnTouchListener(new View.OnTouchListener() {
+            private float xInScreen;
+            private float yInScreen;
+            private int lastX = 0;
+            private int lastY = 0;
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int l, t, r, b;
+
+                switch (event.getAction()) {
+
+                    case MotionEvent.ACTION_DOWN:
+                        lastX = (int) event.getX();
+                        lastY = (int) event.getY();
+
+                        break;
+
+                    case MotionEvent.ACTION_MOVE:
+                        xInScreen = event.getX();
+                        yInScreen = event.getY();
+
+                        int moveY = (int) (event.getY() - lastY);
+                        int moveX = (int) (event.getX() - lastX);
+
+                        int height = view.getBottom() - view.getTop();
+
+                        l = view.getLeft() + moveX;
+                        t = view.getTop() + moveY;
+                        r = view.getRight();
+                        b = view.getBottom() + moveY;
+
+
+                        if (l < -100) {
+                            view.setVisibility(View.GONE);
+                        }
+
+                        if (t < 0) {
+                            t = 0;
+                            b = height;
+                        }
+
+                        if (r > screenWidth) {
+                            r = view.getRight();
+                        }
+
+                        if (b > screenHeight) {
+                            b = screenHeight;
+                            t = screenHeight - height;
+                        }
+
+                        view.layout(l, t, r, b);
+
+                        Log.e("lmtest", "l=" + l + " t=" + t + " r=" + r + " b=" + b + " moveY=" + moveY);
+
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        if (Math.abs(xInScreen - lastX) < 1 && Math.abs(yInScreen - lastY) < 1) {
+                            Toast.makeText(context, "我被点击了。。。", Toast.LENGTH_SHORT).show();
+                        }
+
+                        Log.e("lmtest", "xInScreen - lastX=" + (xInScreen - lastX) + " yInScreen - lastY=" + (yInScreen - lastY));
+
+                        break;
+                }
+
+                return true;
+            }
+        });
+
         return view;
     }
 }
