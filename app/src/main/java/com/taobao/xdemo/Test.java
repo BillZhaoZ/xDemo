@@ -2,6 +2,8 @@ package com.taobao.xdemo;
 
 import android.text.TextUtils;
 
+import com.alibaba.alibclinkpartner.smartlink.ALSLSmartLinkSDK;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -34,6 +37,33 @@ public class Test {
 
     public static void main(String[] args) {
 
+
+        try {
+            HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
+
+            Object taobao = objectObjectHashMap.get("taobao");
+
+            Class<?> aClass = taobao.getClass();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            System.out.println("渠道id：" + e.getMessage());
+
+        }
+
+        System.out.println("渠道id：ccccccc");
+
+
+//        getAdvid();
+
+
+        // System.out.println("dataListAdv=" + stringIntegerEntry);
+
+//        fileList("/Users/bill/Downloads/files_10.10");
+//        fileList222222("/Users/bill/Downloads/files_10.10");
+    }
+
+    private static void getAdvid() {
         dataList.add("2200558954535");
         dataList.add("2200698026644");
         dataList.add("4027831123");
@@ -125,12 +155,6 @@ public class Test {
                 }
             }
         }
-
-
-        // System.out.println("dataListAdv=" + stringIntegerEntry);
-
-//        fileList("/Users/bill/Downloads/files_10.10");
-//        fileList222222("/Users/bill/Downloads/files_10.10");
     }
 
     private static void fileList222222(String filePath) {

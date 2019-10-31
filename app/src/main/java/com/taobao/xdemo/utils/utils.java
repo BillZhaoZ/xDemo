@@ -154,73 +154,48 @@ public class utils {
         layoutParams.setMargins(0, 900, 0, 0);
         view.setLayoutParams(layoutParams);
 
-        final int screenHeight = context.getResources().getDisplayMetrics().heightPixels;
-        final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-
         view.setOnTouchListener(new View.OnTouchListener() {
-            private float xInScreen;
-            private float yInScreen;
             private int lastX = 0;
             private int lastY = 0;
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                int l, t, r, b;
 
+                int x = (int) event.getRawX();
+                int y = (int) event.getRawY();
                 switch (event.getAction()) {
-
                     case MotionEvent.ACTION_DOWN:
-                        lastX = (int) event.getX();
-                        lastY = (int) event.getY();
-
+                        // 记录触摸点坐标
+                        lastX = x;
+                        lastY = y;
                         break;
-
                     case MotionEvent.ACTION_MOVE:
-                        xInScreen = event.getX();
-                        yInScreen = event.getY();
+                        // 计算偏移量
+                        int offsetX = x - lastX;
+                        int offsetY = y - lastY;
 
-                        int moveY = (int) (event.getY() - lastY);
-                        int moveX = (int) (event.getX() - lastX);
+                        int left = view.getLeft() + offsetX;
+                        int top = view.getTop() + offsetY;
+                        int right = view.getRight() + offsetX;
+                        int bottom = view.getBottom() + offsetY;
 
-                        int height = view.getBottom() - view.getTop();
-
-                        l = view.getLeft() + moveX;
-                        t = view.getTop() + moveY;
-                        r = view.getRight();
-                        b = view.getBottom() + moveY;
-
-
-                        if (l < -100) {
-                            view.setVisibility(View.GONE);
+                        if (left > 0) {
+                            left = 0;
                         }
 
-                        if (t < 0) {
-                            t = 0;
-                            b = height;
-                        }
 
-                        if (r > screenWidth) {
-                            r = view.getRight();
-                        }
+                        // 在当前left、top、right、bottom的基础上加上偏移量
+                        view.layout(left, top, right, bottom);
 
-                        if (b > screenHeight) {
-                            b = screenHeight;
-                            t = screenHeight - height;
-                        }
-
-                        view.layout(l, t, r, b);
-
-                        Log.e("lmtest", "l=" + l + " t=" + t + " r=" + r + " b=" + b + " moveY=" + moveY);
-
+                        //重新设置初始化坐标
+                        lastX = x;
+                        lastY = y;
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        if (Math.abs(xInScreen - lastX) < 1 && Math.abs(yInScreen - lastY) < 1) {
-                            Toast.makeText(context, "我被点击了。。。", Toast.LENGTH_SHORT).show();
+                        if (view.getLeft() < -(view.getWidth() / 4)) {
+                            view.setVisibility(View.GONE);
                         }
-
-                        Log.e("lmtest", "xInScreen - lastX=" + (xInScreen - lastX) + " yInScreen - lastY=" + (yInScreen - lastY));
-
                         break;
                 }
 
