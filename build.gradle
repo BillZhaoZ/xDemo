@@ -5,8 +5,9 @@ buildscript {
         jcenter()
         google()
 
-        mavenLocal()
-        mavenCentral()
+        maven {
+            url "http://repo.baichuan-android.taobao.com/content/groups/BaichuanRepositories/"
+        }
     }
 
     dependencies {
@@ -24,12 +25,12 @@ allprojects {
         jcenter()
         google()
 
-       /* maven {
-            url "http://repo.baichuan-android.taobao.com/content/groups/BaichuanRepositories/"
-        }*/
         maven {
-            url "http://mvnrepo.alibaba-inc.com/mvn/repository"
+            url "http://repo.baichuan-android.taobao.com/content/groups/BaichuanRepositories/"
         }
+        /* maven {
+             url "http://mvnrepo.alibaba-inc.com/mvn/repository"
+         }*/
     }
 }
 task clean(type: Delete) {
