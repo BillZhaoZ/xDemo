@@ -2,34 +2,73 @@ package com.taobao.xdemo;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+
+import com.bun.miitmdid.core.JLibrary;
+import com.taobao.xdemo.oaid.MiitHelper;
 import com.taobao.xdemo.utils.utils;
 
-public class App extends Application implements Application.ActivityLifecycleCallbacks {
+public class MyApplication extends Application implements Application.ActivityLifecycleCallbacks {
 
     /*当前对象的静态实例*/
-    private static App instance;
+    private static MyApplication instance;
     /*当前显示的Activity*/
     private Activity activity;
+
+    private static String oaid;
+    private static boolean isSupportOaid;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        JLibrary.InitEntry(base);
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        App.instance = this;
+        MyApplication.instance = this;
         this.registerActivityLifecycleCallbacks(this);
+
+        //获取OAID等设备标识符
+        MiitHelper miitHelper = new MiitHelper(appIdsUpdater);
+        miitHelper.getDeviceIds(getApplicationContext());
     }
+
+    public static boolean isSupportOaid() {
+        return isSupportOaid;
+    }
+
+    public static String getOaid() {
+        return oaid;
+    }
+
+    public static void setIsSupportOaid(boolean isSupportOaid) {
+        MyApplication.isSupportOaid = isSupportOaid;
+    }
+
+    private MiitHelper.AppIdsUpdater appIdsUpdater = new MiitHelper.AppIdsUpdater() {
+        @Override
+        public void OnIdsAvalid(@NonNull String ids) {
+            Log.e("++++++ids: ", ids);
+            oaid = ids;
+        }
+    };
 
     /**
      * 获取Application对象
      *
      * @return 返回一个App对象实例
-     * @see App
+     * @see MyApplication
      */
-    public static App instance() {
-        return App.instance;
+    public static MyApplication instance() {
+        return MyApplication.instance;
     }
 
     /**

@@ -30,7 +30,6 @@ import androidx.core.app.ActivityCompat;
 import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
-import com.taobao.xdemo.utils.FlowCustomLog;
 
 import static com.taobao.xdemo.utils.utils.addShortcut;
 
@@ -147,12 +146,12 @@ public class MainActivity extends AppCompatActivity {
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
                 /*删除View*/
-                App.instance().hideView(view);
+                MyApplication.instance().hideView(view);
             }
         });
 
         /*添加View到当前显示的Activity*/
-        App.instance().showView(view);
+        MyApplication.instance().showView(view);
 
         /*启动动画*/
         animator.start();
