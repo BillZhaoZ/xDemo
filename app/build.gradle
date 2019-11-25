@@ -34,7 +34,7 @@ dependencies {
     implementation 'com.taobao.android:atlas_core:5.1.0.9-rc34'
 
     //移动安全联盟MSA sdk依赖
-    implementation files('libs/miit_mdid_1.0.9.aar')
+    implementation files('libs/miit_mdid_1.0.10.aar')
 }
 
 configurations.all {
