@@ -10,6 +10,7 @@ import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,6 +24,12 @@ import androidx.core.app.ActivityCompat;
 import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 
 
 /**
@@ -196,4 +203,159 @@ public class utils {
 
         return view;
     }
+
+    ////////////////// //////////////////   流量数据统计   ////////////////// ////////////////// /////
+
+    /**
+     * 流量枚举类型
+     */
+    public enum FlowType {
+        //分享
+        SHARE(1, "afc_share"),
+
+        //消息
+        MESSAGE(2, "afc_message"),
+
+        //外链
+        LINK(3, "afc_link"),
+
+        //外链
+        LAUNCH(4, "afc_launch");
+
+        private int code;
+        private String descs;
+
+        FlowType(int code, String descs) {
+            this.code = code;
+            this.descs = descs;
+        }
+
+        public static String getDesc(int value) {
+            for (FlowType flowType : FlowType.values()) {
+                if (flowType.code == value) {
+                    return flowType.descs;
+                }
+            }
+            return null;
+        }
+
+    }
+
+    /**
+     * 改方法很重要！！！ Bi在用  只要涉及到改动，请完全回归！！！
+     *
+     * @param flowType   流量类型，枚举，目前包括外链拉端，分享回流，push启动（必选）
+     * @param landingUrl 进端URL
+     * @param extraMap   备用字典(会透传全链路)（必选）
+     * @return https://yuque.antfin-inc.com/lzksb7/suy1p9/mmwdoz
+     */
+    public static String handleFlowParams(FlowType flowType, String landingUrl, Map<String, String> extraMap) {
+        StringBuffer afcId = new StringBuffer();
+
+        // 生成afc_id
+        String afcIdPostFix = UUID.randomUUID().toString() + "_" + getCurrentTime();
+
+        if (extraMap == null) {
+            extraMap = new HashMap<>();
+        }
+        extraMap.put("url", landingUrl);
+
+        try {
+            if (flowType == FlowType.SHARE) {
+                // 分享 extraMap传入原始URL  需要解析ut_sk   ut_sk=1.[utdid][appKey]tiemstamp.[渠道].[bzid]
+                // ut_sk=1.utdid_appKey_1556072379528.TaoPassword-Outside.taoketop
+                String appKey = "unknown";
+                String busniess = "unknown";
+
+                Uri data = Uri.parse(landingUrl);
+
+                if (data != null) {
+                    String ut_sk = data.getQueryParameter("ut_sk");
+
+                    if (!TextUtils.isEmpty(ut_sk)) {
+                        String[] split = ut_sk.split("\\.");
+                        if (split.length > 3) {
+                            String channel = !TextUtils.isEmpty(split[2]) ? split[2] : "unknown";
+                            String bizId = !TextUtils.isEmpty(split[3]) ? split[3] : "unknown";
+
+                            String tempData = split[1];
+                            String[] partsData = tempData.split("_");
+                            appKey = !TextUtils.isEmpty(partsData[1]) ? partsData[1] : "unknown";
+                            busniess = channel + "_" + bizId;   //channel_bizid
+                        }
+                    }
+                }
+
+                afcId = afcId.append(FlowType.SHARE.descs).append("^").append(appKey).append("^")
+                        .append(busniess).append("^").append(afcIdPostFix);
+
+            } else if (flowType == FlowType.MESSAGE) {
+                // 消息 传递参数  bizType,messageId,messageType,senderId,receiverId,sendTime,shwoTime,pushId,folderMsgs
+                // 需要消息把目前打在arg2里的参数，“是否是应用内push”传过来  打在arg3里的参数，“跳转URL”传过来
+                String messageId = extraMap.get("messageId");
+
+                afcId = afcId.append(FlowType.MESSAGE.descs).append("^").append(messageId).append("^")
+                        .append(messageId).append("^").append(afcIdPostFix);
+
+            } else if (flowType == FlowType.LINK) {
+                // 海关外链
+                String packageName = extraMap.get("packageName");
+                String source = !TextUtils.isEmpty(packageName) ? packageName : "unknown";
+                String bc_fl_src = extraMap.get("bc_fl_src");
+                String busniess = !TextUtils.isEmpty(bc_fl_src) ? bc_fl_src : "nbc";
+                String tag = TextUtils.equals("true", extraMap.get("is_link")) ? FlowType.LINK.descs : "afc_unlink";
+
+                // 对登录授权特殊处理
+                if (isLoginLink(landingUrl)) {
+                    busniess = "is_auth";
+                }
+
+                afcId = afcId.append(tag).append("^").append(source).append("^").append(busniess)
+                        .append("^").append(afcIdPostFix);
+
+            } else if (flowType == FlowType.LAUNCH) {
+                // 正常冷启
+                afcId = afcId.append(FlowType.LAUNCH.descs).append("^").append("com.taobao.taobao").append("^")
+                        .append("1012_Initiactive").append("^").append(afcIdPostFix);
+            }
+
+        } catch (Exception e) {
+            FlowCustomLog.d(LOG_TAG, "TFCCommonUtils === flowParamsHandle: 异常:" + e.toString());
+        }
+
+        // 全局埋点
+//        UTAnalytics.getInstance().getDefaultTracker().setGlobalProperty("_afc_id", afcId.toString());
+        // 1013埋点
+        //   UserTrackUtils.sendCustomHit(UserTrackUtils.EVENT_ID_1013, "afc_flow_track", afcId.toString(), "", extraMap);
+
+        FlowCustomLog.d(LOG_TAG, "TFCCommonUtils === flowParamsHandle: afcId = " + afcId.toString());
+        return afcId.toString();
+    }
+
+    /**
+     * 是否是登录授权唤端
+     * tbopen://m.taobao.com/sso
+     * tbopen://m.taobao.com/getway/oauth
+     *
+     * @param url
+     * @return
+     */
+    private static boolean isLoginLink(String url) {
+        if (url != null) {
+            if (url.contains("tbopen://m.taobao.com/sso") || url.contains("tbopen://m.taobao.com/getway/oauth")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取当前时间戳
+     *
+     * @return
+     */
+    public static long getCurrentTime() {
+        return System.currentTimeMillis();
+    }
+
 }

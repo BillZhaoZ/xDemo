@@ -1,4 +1,4 @@
-package com.taobao.xdemo;
+package com.bill.myserver;
 
 import org.junit.Test;
 

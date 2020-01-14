@@ -7,6 +7,33 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv_aidl"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="aidl跳转"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_afc_id"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="获取afc_id"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_oaid"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="获取oaid"
+        android:visibility="visible" />
+
+    <TextView
         android:id="@+id/tv_transparebt"
         android:layout_width="wrap_content"
         android:layout_height="35dp"

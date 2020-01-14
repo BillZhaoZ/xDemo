@@ -27,9 +27,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.alibaba.openid.OpenDeviceId;
+import com.bun.miitmdid.core.Utils;
 import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
+import com.taobao.xdemo.utils.FlowCustomLog;
+import com.taobao.xdemo.utils.utils;
+
+import java.util.HashMap;
 
 import static com.taobao.xdemo.utils.utils.addShortcut;
 
@@ -42,6 +48,44 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        findViewById(R.id.tv_aidl).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, AidlTestActivity.class));
+            }
+        });
+
+        findViewById(R.id.tv_afc_id).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                HashMap<String, String> stringStringHashMap = new HashMap<>();
+                stringStringHashMap.put("is_link", "true");
+                utils.handleFlowParams(utils.FlowType.LINK, "tbopen://", stringStringHashMap);
+            }
+        });
+
+        // 获取oaid
+        findViewById(R.id.tv_oaid).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            String oaid = OpenDeviceId.getOAID(MainActivity.this);
+                            FlowCustomLog.d("Test", "TbFcLinkInit === oaid= " + oaid);
+                        }
+                    }).start();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         findViewById(R.id.tv_transparebt).setOnClickListener(new View.OnClickListener() {
             @Override
