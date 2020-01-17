@@ -34,8 +34,7 @@ public class MyService extends Service {
 
         @Override
         public String getString() throws RemoteException {
-            String string = "我是从服务起返回的";
-
+            String string = "我是从服务端返回的数据哦";
             return string;
         }
     }

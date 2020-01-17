@@ -7,6 +7,15 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/tv_clipboard"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="读取剪切板"
+        android:visibility="visible" />
+
+    <TextView
         android:id="@+id/tv_aidl"
         android:layout_width="wrap_content"
         android:layout_height="35dp"

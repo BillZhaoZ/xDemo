@@ -7,6 +7,8 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -49,6 +51,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // 读取剪切板
+        findViewById(R.id.tv_clipboard).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String s = readClipBoard(MainActivity.this);
+                Toast.makeText(MainActivity.this, "读取到了：" + s, Toast.LENGTH_LONG).show();
+            }
+        });
 
         findViewById(R.id.tv_aidl).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,6 +175,31 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * 读取剪切板
+     */
+    private String readClipBoard(Context context) {
+        if (context == null) {
+            return "";
+        }
+
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+
+        // 检查剪贴板是否有内容
+        if (!clipboard.hasPrimaryClip()) {
+            return "";
+        }
+
+        ClipData clipData = clipboard.getPrimaryClip();
+        int count = clipData == null ? 0 : clipData.getItemCount();
+
+        if (count > 0 && clipData.getItemAt(0) != null && clipData.getItemAt(0).getText() != null) {
+            return clipData.getItemAt(0).getText().toString();
+        } else {
+            return "";
+        }
+    }
+
     private void showView() {
         createAndStart();
     }
@@ -227,7 +262,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private static String sReadPhoneState = Manifest.permission.READ_PHONE_STATE;
-
 
     public static String getIMEI(Context context) {
         if (context == null) {

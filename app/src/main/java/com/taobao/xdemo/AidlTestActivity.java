@@ -67,6 +67,7 @@ public class AidlTestActivity extends AppCompatActivity {
         unbindService.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                tvData.setText("服务已经解绑");
                 unbindService(connection);
             }
         });
