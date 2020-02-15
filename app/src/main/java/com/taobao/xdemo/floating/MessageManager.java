@@ -7,10 +7,13 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.bun.miitmdid.core.Utils;
 import com.taobao.xdemo.notification.MessageData;
 import com.taobao.xdemo.utils.FlowCustomLog;
+import com.taobao.xdemo.utils.utils;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -78,7 +81,12 @@ public class MessageManager {
             //  小助手没有新消息   小助手不消失
             if (!isShowNewMessage && !isDisappear) {
 
-                if (FloatUtils.isHome(mContext) && !FloatAssistantManager.isWindowShowing()) {
+                boolean home = utils.isHome(mContext);
+                boolean home2 = FloatUtils.isHome(mContext);
+
+                Log.d("haha", "is_home === " + home + "  home2=" + home2);
+
+                if (utils.isHome(mContext) && !FloatAssistantManager.isWindowShowing()) {
                     // 当前界面是桌面，且没有悬浮窗显示，则创建悬浮窗。
 
                     handler.post(new Runnable() {
@@ -90,7 +98,7 @@ public class MessageManager {
                         }
                     });
 
-                } else if (!FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
+                } else if (!utils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
                     // 当前界面不是桌面， 且有悬浮窗显示，则移除悬浮窗。
                     // TODO  手淘在前台 是否显示小助手
 
@@ -102,7 +110,7 @@ public class MessageManager {
                         }
                     });
 
-                } else if (FloatUtils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
+                } else if (utils.isHome(mContext) && FloatAssistantManager.isWindowShowing()) {
                     // 当前界面是桌面，且有悬浮窗显示，则更新内存数据。
                     handler.post(new Runnable() {
                         @Override

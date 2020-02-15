@@ -7,9 +7,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -31,6 +33,7 @@ import androidx.core.app.ActivityCompat;
 
 import com.alibaba.openid.OpenDeviceId;
 import com.bun.miitmdid.core.Utils;
+import com.taobao.flowcustoms.afc.AFCAdapter;
 import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
@@ -50,6 +53,23 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+       /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                .setTitle("嗨，收到你的专属福利")
+                .setPositiveButton("马上查看", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                        // 导航
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+        builder.create().show();*/
 
         // 读取剪切板
         findViewById(R.id.tv_clipboard).setOnClickListener(new View.OnClickListener() {

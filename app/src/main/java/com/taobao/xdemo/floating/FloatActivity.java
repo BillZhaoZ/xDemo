@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.notification.NotificationUtils;
 import com.taobao.xdemo.utils.FlowCustomLog;
+import com.taobao.xdemo.utils.utils;
 
 import static com.taobao.xdemo.floating.MessageManager.ASSISTANT_DISAPPEAR;
 import static com.taobao.xdemo.floating.MessageManager.ASSISTANT_NEW_MSG;
@@ -34,6 +35,9 @@ public class FloatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_float);
+
+
+       utils. checkUsageStateAccessPermission(this);
 
 
         // 是否支持小助手功能

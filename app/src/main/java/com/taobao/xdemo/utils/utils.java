@@ -1,10 +1,15 @@
 package com.taobao.xdemo.utils;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.PendingIntent;
+import android.app.usage.UsageStats;
+import android.app.usage.UsageStatsManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
@@ -25,10 +30,13 @@ import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.R;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static android.content.ContentValues.TAG;
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 
 
@@ -358,4 +366,115 @@ public class utils {
         return System.currentTimeMillis();
     }
 
+
+    /**
+     * 判断当前界面是否是桌面
+     */
+    public static boolean isHome(Context context) {
+        try {
+            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningTaskInfo> rti = mActivityManager.getRunningTasks(1);
+
+//            return getHomes(context).contains(rti.get(0).topActivity.getPackageName());
+
+            return getHomes(context).contains(getTopApp(context));
+
+        } catch (Throwable e) {
+            Log.d(LOG_TAG, "LinkUtils === isHome === 判断异常" + e);
+        }
+
+        return false;
+    }
+
+    /**
+     * 获得属于桌面的应用的应用包名称
+     *
+     * @return 返回包含所有包名的字符串列表
+     */
+    private static List<String> getHomes(Context context) {
+        List<String> names = new ArrayList<>();
+        PackageManager packageManager = context.getPackageManager();
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo ri : resolveInfo) {
+            names.add(ri.activityInfo.packageName);
+        }
+        return names;
+    }
+
+    public static String getTopApp(Context context) {
+        //android5.0 above
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            UsageStatsManager m = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+            if (null != m) {
+                long now = System.currentTimeMillis();
+                //obtain recent in 1 hour app status
+                List<UsageStats> stats = m.queryUsageStats(UsageStatsManager.INTERVAL_BEST, now - 60 * 1000 * 60, now);
+                String topActivity = "";
+                //obtain recent run app，maybe running app
+                if ((stats != null) && (!stats.isEmpty())) {
+                    int j = 0;
+                    for (int i = 0; i < stats.size(); i++) {
+                        if (stats.get(i).getLastTimeUsed() > stats.get(j).getLastTimeUsed()) {
+                            j = i;
+                        }
+                    }
+                    topActivity = stats.get(j).getPackageName();
+
+                   /* UsageStats recentStats = null;
+                    for (UsageStats usageStats : stats) {
+                        if (recentStats == null
+                                || recentStats.getLastTimeUsed() < usageStats.getLastTimeUsed()) {
+                            recentStats = usageStats;
+                        }
+                    }
+                    String packname = recentStats.getPackageName();
+
+                    return packname;*/
+                }
+
+                return topActivity;
+            }
+        } else {
+            //android5.0 below
+            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            List<ActivityManager.RunningTaskInfo> rti = mActivityManager.getRunningTasks(1);
+            return rti.get(0).topActivity.getPackageName();
+        }
+        return null;
+    }
+
+
+    public static void checkUsageStateAccessPermission(Context context) {
+        if (!checkAppUsagePermission(context)) {
+            requestAppUsagePermission(context);
+        }
+    }
+
+    public static boolean checkAppUsagePermission(Context context) {
+        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        if (usageStatsManager == null) {
+            return false;
+        }
+        long currentTime = System.currentTimeMillis();
+        // try to get app usage state in last 1 min
+        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTime - 60 * 1000, currentTime);
+        if (stats.size() == 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static void requestAppUsagePermission(Context context) {
+        Intent intent = new Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Log.i("haha", "Start usage access settings activity fail!");
+        }
+    }
 }
