@@ -6,11 +6,11 @@ public class TestC {
 
     public static void main(String[] args) {
 
-        hahahMater333333();
+        hahahMater2();
 
     }
 
-    private static void hahahMater333333() {
+    private static void hahahMater2() {
 
         HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
 
