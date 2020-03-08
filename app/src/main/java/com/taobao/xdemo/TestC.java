@@ -11,6 +11,7 @@ public class TestC {
     }
 
     private static void hahahMater() {
+
         HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
 
         objectObjectHashMap.put("cc", "cccc");
