@@ -5,10 +5,10 @@ import java.util.HashMap;
 public class TestC {
 
     public static void main(String[] args) {
-        hahahMater2();
+        hahahMater444();
     }
 
-    private static void hahahMater2() {
+    private static void hahahMater444() {
         HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
 
         objectObjectHashMap.put("cc", "cccc");
