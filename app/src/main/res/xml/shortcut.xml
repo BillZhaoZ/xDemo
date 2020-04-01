@@ -1,0 +1,18 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/icon"
+        android:shortcutDisabledMessage="@string/settings_disable_msg"
+        android:shortcutId="settings"
+        android:shortcutLongLabel="@string/settings_long_name"
+        android:shortcutShortLabel="@string/settings_short_name">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetClass="com.taobao.tao.welcome.Welcome"
+            android:targetPackage="com.taobao.taobao" />
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+
+</shortcuts>

@@ -15,7 +15,6 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
-
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
@@ -29,13 +28,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AidlTestActivity"></activity>
+        <activity android:name=".TimeActivity"></activity>
+        <activity android:name=".AidlTestActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcut" />
+
         </activity>
         <activity
             android:name=".smartlink.SnartLinkActivity"
@@ -49,7 +54,7 @@
         </receiver>
 
         <activity
-            android:name=".Main3Activity"
+            android:name=".BottomActivity"
             android:theme="@style/TransparentTheme" />
 
         <service android:name=".floating.FloatWindowService" />

@@ -7,11 +7,9 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -24,6 +22,7 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +31,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.alibaba.openid.OpenDeviceId;
-import com.bun.miitmdid.core.Utils;
-import com.taobao.flowcustoms.afc.AFCAdapter;
+
 import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
@@ -70,6 +68,13 @@ public class MainActivity extends AppCompatActivity {
                 });
 
         builder.create().show();*/
+
+        findViewById(R.id.tv_time).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TimeActivity.class));
+            }
+        });
 
         // 读取剪切板
         findViewById(R.id.tv_clipboard).setOnClickListener(new View.OnClickListener() {
@@ -121,12 +126,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 RequestOverlayPermission(getApplicationContext());
-//                startActivity(new Intent(getApplicationContext(), Main3Activity.class));
+                //                startActivity(new Intent(getApplicationContext(), Main3Activity.class));
 
                 new Handler(Looper.myLooper()).postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        startActivity(new Intent(getApplicationContext(), Main3Activity.class));
+                        startActivity(new Intent(getApplicationContext(), BottomActivity.class));
                     }
                 }, 0);
 
@@ -148,10 +153,19 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "点击了", Toast.LENGTH_SHORT).show();
 
                 addShortcut(MainActivity.this, "我是测试icon 第一个", "11", R.drawable.link_semicircle
-                        , "tbopen://m.taobao.com/tbopen/index.html?ext=default&clientId=2&materialType=1&carrierType=2&authorId=LlEowB0uPR8&clientVersion=6.5.2.9311&materialId=4xHkQouLbN0&itemId=lpjnOjEWStk&sourceType=2&linkUrl=https%3A%2F%2Fitem.taobao.com%2Fitem.htm%3Fid%3D596138545472&linkType=0&carrierId=8MImYufSxwA&visitorId=ycUl2KCsXP0&action=ali.open.nav&module=h5&appkey=24648319&TTID=2014_0_24648319%40baichuan_h5_0.3.8&source=linksdk&v=0.3.8&h5Url=https%3A%2F%2Fitem.taobao.com%2Fitem.htm%3Fid%3D596138545472%26params%3D%257B%2522ybhpss%2522%253A%2522dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%25253D%25253D%2522%257D&params=%7B%22ybhpss%22%3A%22dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%253D%253D%22%7D&backURL=kwai%3A%2F%2Faction%2FbringToFront");
+                    ,
+                    "tbopen://m.taobao.com/tbopen/index.html?ext=default&clientId=2&materialType=1&carrierType=2"
+                        + "&authorId=LlEowB0uPR8&clientVersion=6.5.2"
+                        + ".9311&materialId=4xHkQouLbN0&itemId=lpjnOjEWStk&sourceType=2&linkUrl=https%3A%2F%2Fitem"
+                        + ".taobao.com%2Fitem.htm%3Fid%3D596138545472&linkType=0&carrierId=8MImYufSxwA&visitorId"
+                        + "=ycUl2KCsXP0&action=ali.open.nav&module=h5&appkey=24648319&TTID=2014_0_24648319"
+                        + "%40baichuan_h5_0.3.8&source=linksdk&v=0.3.8&h5Url=https%3A%2F%2Fitem.taobao.com%2Fitem"
+                        + ".htm%3Fid%3D596138545472%26params%3D%257B%2522ybhpss%2522%253A"
+                        + "%2522dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%25253D%25253D%2522%257D&params"
+                        + "=%7B%22ybhpss%22%3A%22dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%253D%253D%22"
+                        + "%7D&backURL=kwai%3A%2F%2Faction%2FbringToFront");
             }
         });
-
 
         findViewById(R.id.tv_add_shortcut2).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "点击了222222", Toast.LENGTH_SHORT).show();
 
                 addShortcut(MainActivity.this, "我是测试icon 第2个", "22", R.drawable.link_semicircle
-                        , "http://wapp.m.taobao.com");
+                    , "http://wapp.m.taobao.com");
             }
         });
 
@@ -170,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), SnartLinkActivity.class));
             }
         });
-
 
         // rom信息
         final TextView viewById = findViewById(R.id.tv_rom);
@@ -183,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
                 viewById.setText("机型rom信息：" + romType);
             }
         });
-
 
         // 小助手
         findViewById(R.id.tv_float).setOnClickListener(new View.OnClickListener() {
@@ -203,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
             return "";
         }
 
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
 
         // 检查剪贴板是否有内容
         if (!clipboard.hasPrimaryClip()) {
@@ -263,9 +275,8 @@ public class MainActivity extends AppCompatActivity {
      * @return 返回转换后的px值
      */
     private int dp2px(int dp) {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+        return (int)(dp * Resources.getSystem().getDisplayMetrics().density);
     }
-
 
     /**
      * 动态请求悬浮窗权限   跳转到显示到其他APP 上层界面
@@ -276,7 +287,8 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= 23) {
 
             String ACTION_MANAGE_OVERLAY_PERMISSION = "android.settings.action.MANAGE_OVERLAY_PERMISSION";
-            Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + context.getPackageName()));
+            Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + context.getPackageName()));
             startActivityForResult(intent, 5004);
         }
     }
@@ -289,11 +301,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         try {
-            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
             if (ActivityCompat.checkSelfPermission(context, sReadPhoneState) == PackageManager.PERMISSION_GRANTED) {
                 return telephonyManager.getDeviceId();
             } else {
-                ActivityCompat.requestPermissions((Activity) context, new String[]{sReadPhoneState}, 122);
+                ActivityCompat.requestPermissions((Activity)context, new String[] {sReadPhoneState}, 122);
             }
         } catch (Exception e) {
 

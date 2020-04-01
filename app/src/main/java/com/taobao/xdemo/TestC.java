@@ -16,6 +16,10 @@ public class TestC {
         objectObjectHashMap.put("cc", "cccc");
         objectObjectHashMap.put("cc", "cccc");
         objectObjectHashMap.put("cc", "cccc");
+
+        Object dddd = objectObjectHashMap.get("dddd");
+
+        System.out.println("ddd" + dddd);
     }
 
     synchronized void getccc() {
