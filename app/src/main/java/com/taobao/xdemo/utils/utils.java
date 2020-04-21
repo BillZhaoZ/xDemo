@@ -350,7 +350,7 @@ public class utils {
      * @param url
      * @return
      */
-    private static boolean isLoginLink(String url) {
+    public static boolean isLoginLink(String url) {
         if (url != null) {
             if (url.contains("tbopen://m.taobao.com/sso") || url.contains("tbopen://m.taobao.com/getway/oauth")) {
                 return true;

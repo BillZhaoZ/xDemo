@@ -8,7 +8,8 @@ android {
         applicationId "com.taobao.xdemo"
         minSdkVersion 16
         targetSdkVersion 28
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -17,6 +18,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 repositories {
@@ -34,7 +40,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
 
     implementation 'com.alibaba.sdk.android:alibc_link_partner:4.1.22@aar'
     implementation 'com.taobao.android:atlas_core:5.1.0.9-rc34'
