@@ -12,9 +12,14 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.content.res.Resources;
+import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -27,6 +32,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -37,8 +43,11 @@ import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 import com.taobao.xdemo.utils.FlowCustomLog;
 import com.taobao.xdemo.utils.utils;
+import com.taobao.xdemo.utils.utils.FlowType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.taobao.xdemo.utils.utils.addShortcut;
 
@@ -51,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 长按
+        if (VERSION.SDK_INT >= VERSION_CODES.N_MR1) {
+            utils.setupShortcuts(MainActivity.this);
+        }
 
        /* AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
                 .setTitle("嗨，收到你的专属福利")
@@ -77,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 读取剪切板
-        findViewById(R.id.tv_clipboard).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_clipboard).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 String s = readClipBoard(MainActivity.this);
@@ -85,25 +99,25 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.tv_aidl).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_aidl).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AidlTestActivity.class));
             }
         });
 
-        findViewById(R.id.tv_afc_id).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_afc_id).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 HashMap<String, String> stringStringHashMap = new HashMap<>();
                 stringStringHashMap.put("is_link", "true");
-                utils.handleFlowParams(utils.FlowType.LINK, "tbopen://", stringStringHashMap);
+                utils.handleFlowParams(FlowType.LINK, "tbopen://", stringStringHashMap);
             }
         });
 
         // 获取oaid
-        findViewById(R.id.tv_oaid).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_oaid).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -122,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.tv_transparebt).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_transparebt).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 RequestOverlayPermission(getApplicationContext());
@@ -140,14 +154,14 @@ public class MainActivity extends AppCompatActivity {
 
         createAndStart();
 
-        findViewById(R.id.tv_show_pop).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_show_pop).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 showView();
             }
         });
 
-        findViewById(R.id.tv_add_shortcut).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_add_shortcut).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "点击了", Toast.LENGTH_SHORT).show();
@@ -167,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.tv_add_shortcut2).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_add_shortcut2).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "点击了222222", Toast.LENGTH_SHORT).show();
@@ -178,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 智能分流
-        findViewById(R.id.tv_call_ad).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_call_ad).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), SnartLinkActivity.class));
@@ -188,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
         // rom信息
         final TextView viewById = findViewById(R.id.tv_rom);
 
-        viewById.setOnClickListener(new View.OnClickListener() {
+        viewById.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("MyTest", "点击获取rom数据");
@@ -198,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // 小助手
-        findViewById(R.id.tv_float).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.tv_float).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), FloatActivity.class));
@@ -313,4 +327,5 @@ public class MainActivity extends AppCompatActivity {
 
         return "";
     }
+
 }

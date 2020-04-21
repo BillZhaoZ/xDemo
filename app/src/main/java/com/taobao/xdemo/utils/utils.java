@@ -15,6 +15,7 @@ import android.content.pm.ShortcutManager;
 import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,10 +25,12 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 
 import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.R;
+import com.taobao.xdemo.TimeActivity;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 
 import java.util.ArrayList;
@@ -38,7 +41,6 @@ import java.util.UUID;
 
 import static android.content.ContentValues.TAG;
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
-
 
 /**
  * @author bill
@@ -52,7 +54,6 @@ public class utils {
     private static final String mPinShortcutId = "hankinhui_shortcut";
     private android.widget.LinearLayout viewtopmsgparent;
 
-
     // https://www.cnblogs.com/mengdd/p/3837592.html
 
     public static void addShortcut(Context context, String labelName, String labelId, int resId, String url) {
@@ -62,11 +63,12 @@ public class utils {
             int request = context.checkSelfPermission(ACTION_ADD_SHORTCUT);
 
             if (request != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions((Activity) context, new String[]{ACTION_ADD_SHORTCUT}, 1222);
+                ActivityCompat.requestPermissions((Activity)context, new String[] {ACTION_ADD_SHORTCUT}, 1222);
                 Log.e("lmtest", "没有权限");
             }
 
-            ShortcutManager shortcutManager = (ShortcutManager) context.getSystemService(Context.SHORTCUT_SERVICE);//获取shortcutManager
+            ShortcutManager shortcutManager = (ShortcutManager)context.getSystemService(
+                Context.SHORTCUT_SERVICE);//获取shortcutManager
             //如果默认桌面支持requestPinShortcut（ShortcutInfo，IntentSender）方法，则返回TRUE。
 
           /*  List<ShortcutInfo> infos = shortcutManager.getPinnedShortcuts();
@@ -88,13 +90,13 @@ public class utils {
 
                 //快捷方式创建相关信息。图标名字 labelId
                 ShortcutInfo shortcutInfo = new ShortcutInfo.Builder(context, labelId)
-                        .setIcon(Icon.createWithResource(context, resId))
-                        .setShortLabel(labelName)
-                        .setIntent(shortCutIntent)
-                        .build();
+                    .setIcon(Icon.createWithResource(context, resId))
+                    .setShortLabel(labelName)
+                    .setIntent(shortCutIntent)
+                    .build();
                 //创建快捷方式时候回调
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, new
-                        Intent(context, SnartLinkActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                    Intent(context, SnartLinkActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
                 shortcutManager.requestPinShortcut(shortcutInfo, pendingIntent.getIntentSender());
 
             } else {
@@ -116,14 +118,14 @@ public class utils {
 
             // 图标
             addShortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-                    Intent.ShortcutIconResource.fromContext(context, resId));
+                Intent.ShortcutIconResource.fromContext(context, resId));
 
             // 设置关联程序
             Uri uri = Uri.parse(url);
             Intent launcherIntent = new Intent(Intent.ACTION_VIEW, uri);
 
             addShortcutIntent
-                    .putExtra(Intent.EXTRA_SHORTCUT_INTENT, launcherIntent);
+                .putExtra(Intent.EXTRA_SHORTCUT_INTENT, launcherIntent);
 
             // 发送广播
             context.sendBroadcast(addShortcutIntent);
@@ -131,7 +133,6 @@ public class utils {
 
         Toast.makeText(context, "创建快捷方式成功", Toast.LENGTH_SHORT).show();
     }
-
 
     private void removeShortcut(Context context, String name) {
         // remove shortcut的方法在小米系统上不管用，在三星上可以移除
@@ -142,7 +143,7 @@ public class utils {
 
         // 设置关联程序
         Intent launcherIntent = new Intent(context, MainActivity.class)
-                .setAction(Intent.ACTION_MAIN);
+            .setAction(Intent.ACTION_MAIN);
 
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, launcherIntent);
 
@@ -156,7 +157,8 @@ public class utils {
     public static View getView(final Context context) {
         final View view = LayoutInflater.from(context).inflate(R.layout.view_top_msg, null);
 
-        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        final FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(0, 900, 0, 0);
         view.setLayoutParams(layoutParams);
 
@@ -167,8 +169,8 @@ public class utils {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                int x = (int) event.getRawX();
-                int y = (int) event.getRawY();
+                int x = (int)event.getRawX();
+                int y = (int)event.getRawY();
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         // 记录触摸点坐标
@@ -188,7 +190,6 @@ public class utils {
                         if (left > 0) {
                             left = 0;
                         }
-
 
                         // 在当前left、top、right、bottom的基础上加上偏移量
                         view.layout(left, top, right, bottom);
@@ -295,7 +296,7 @@ public class utils {
                 }
 
                 afcId = afcId.append(FlowType.SHARE.descs).append("^").append(appKey).append("^")
-                        .append(busniess).append("^").append(afcIdPostFix);
+                    .append(busniess).append("^").append(afcIdPostFix);
 
             } else if (flowType == FlowType.MESSAGE) {
                 // 消息 传递参数  bizType,messageId,messageType,senderId,receiverId,sendTime,shwoTime,pushId,folderMsgs
@@ -303,7 +304,7 @@ public class utils {
                 String messageId = extraMap.get("messageId");
 
                 afcId = afcId.append(FlowType.MESSAGE.descs).append("^").append(messageId).append("^")
-                        .append(messageId).append("^").append(afcIdPostFix);
+                    .append(messageId).append("^").append(afcIdPostFix);
 
             } else if (flowType == FlowType.LINK) {
                 // 海关外链
@@ -319,12 +320,12 @@ public class utils {
                 }
 
                 afcId = afcId.append(tag).append("^").append(source).append("^").append(busniess)
-                        .append("^").append(afcIdPostFix);
+                    .append("^").append(afcIdPostFix);
 
             } else if (flowType == FlowType.LAUNCH) {
                 // 正常冷启
                 afcId = afcId.append(FlowType.LAUNCH.descs).append("^").append("com.taobao.taobao").append("^")
-                        .append("1012_Initiactive").append("^").append(afcIdPostFix);
+                    .append("1012_Initiactive").append("^").append(afcIdPostFix);
             }
 
         } catch (Exception e) {
@@ -332,9 +333,10 @@ public class utils {
         }
 
         // 全局埋点
-//        UTAnalytics.getInstance().getDefaultTracker().setGlobalProperty("_afc_id", afcId.toString());
+        //        UTAnalytics.getInstance().getDefaultTracker().setGlobalProperty("_afc_id", afcId.toString());
         // 1013埋点
-        //   UserTrackUtils.sendCustomHit(UserTrackUtils.EVENT_ID_1013, "afc_flow_track", afcId.toString(), "", extraMap);
+        //   UserTrackUtils.sendCustomHit(UserTrackUtils.EVENT_ID_1013, "afc_flow_track", afcId.toString(), "",
+        //   extraMap);
 
         FlowCustomLog.d(LOG_TAG, "TFCCommonUtils === flowParamsHandle: afcId = " + afcId.toString());
         return afcId.toString();
@@ -366,16 +368,15 @@ public class utils {
         return System.currentTimeMillis();
     }
 
-
     /**
      * 判断当前界面是否是桌面
      */
     public static boolean isHome(Context context) {
         try {
-            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager mActivityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningTaskInfo> rti = mActivityManager.getRunningTasks(1);
 
-//            return getHomes(context).contains(rti.get(0).topActivity.getPackageName());
+            //            return getHomes(context).contains(rti.get(0).topActivity.getPackageName());
 
             return getHomes(context).contains(getTopApp(context));
 
@@ -407,7 +408,7 @@ public class utils {
         //android5.0 above
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            UsageStatsManager m = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+            UsageStatsManager m = (UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);
             if (null != m) {
                 long now = System.currentTimeMillis();
                 //obtain recent in 1 hour app status
@@ -439,13 +440,12 @@ public class utils {
             }
         } else {
             //android5.0 below
-            ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager mActivityManager = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
             List<ActivityManager.RunningTaskInfo> rti = mActivityManager.getRunningTasks(1);
             return rti.get(0).topActivity.getPackageName();
         }
         return null;
     }
-
 
     public static void checkUsageStateAccessPermission(Context context) {
         if (!checkAppUsagePermission(context)) {
@@ -454,13 +454,14 @@ public class utils {
     }
 
     public static boolean checkAppUsagePermission(Context context) {
-        UsageStatsManager usageStatsManager = (UsageStatsManager) context.getSystemService(Context.USAGE_STATS_SERVICE);
+        UsageStatsManager usageStatsManager = (UsageStatsManager)context.getSystemService(Context.USAGE_STATS_SERVICE);
         if (usageStatsManager == null) {
             return false;
         }
         long currentTime = System.currentTimeMillis();
         // try to get app usage state in last 1 min
-        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, currentTime - 60 * 1000, currentTime);
+        List<UsageStats> stats = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY,
+            currentTime - 60 * 1000, currentTime);
         if (stats.size() == 0) {
             return false;
         }
@@ -476,5 +477,28 @@ public class utils {
         } catch (ActivityNotFoundException e) {
             Log.i("haha", "Start usage access settings activity fail!");
         }
+    }
+
+    @RequiresApi(api = VERSION_CODES.N_MR1)
+    public static void setupShortcuts(Context context) {
+
+        ShortcutManager mShortcutManager = context.getSystemService(ShortcutManager.class);
+        List<ShortcutInfo> infos = new ArrayList<>();
+
+        for (int i = 0; i < mShortcutManager.getMaxShortcutCountPerActivity(); i++) {
+
+            Intent intent = new Intent(context, TimeActivity.class);
+            intent.setAction(Intent.ACTION_VIEW);
+
+            ShortcutInfo info = new ShortcutInfo.Builder(context, "id" + i)
+                .setShortLabel("hahahahah")
+                .setLongLabel("联系人:22222")
+                .setIcon(Icon.createWithResource(context, R.drawable.icon))
+                .setIntent(intent)
+                .build();
+            infos.add(info);
+        }
+
+        mShortcutManager.setDynamicShortcuts(infos);
     }
 }
