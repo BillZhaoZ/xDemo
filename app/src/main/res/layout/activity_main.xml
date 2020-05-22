@@ -7,11 +7,20 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/tv_time"
+        android:id="@+id/tv_float"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
+        android:text="天猫小助手" />
+
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:text="测试时间戳"
         android:visibility="visible" />
 
@@ -20,7 +29,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="读取剪切板"
         android:visibility="visible" />
 
@@ -29,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="aidl跳转"
         android:visibility="visible" />
 
@@ -38,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="获取afc_id"
         android:visibility="visible" />
 
@@ -56,7 +65,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="透明页面测试"
         android:visibility="visible" />
 
@@ -65,7 +74,7 @@
         android:layout_width="wrap_content"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:text="显示小把手"
         android:visibility="visible" />
 
@@ -113,12 +122,6 @@
         android:text="获取机型rom信息" />
 
 
-    <TextView
-        android:id="@+id/tv_float"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:text="天猫小助手" />
+
 
 </LinearLayout>
