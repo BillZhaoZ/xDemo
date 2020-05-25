@@ -1,5 +1,9 @@
 package com.taobao.xdemo;
 
+import java.util.HashMap;
+
+import com.alibaba.openid.OpenDeviceId;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -12,10 +16,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ShortcutInfo;
-import android.content.pm.ShortcutManager;
 import android.content.res.Resources;
-import android.graphics.drawable.Icon;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -31,24 +32,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
-import com.alibaba.openid.OpenDeviceId;
-
 import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 import com.taobao.xdemo.utils.FlowCustomLog;
+import com.taobao.xdemo.utils.HookManager;
 import com.taobao.xdemo.utils.utils;
 import com.taobao.xdemo.utils.utils.FlowType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
+import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 import static com.taobao.xdemo.utils.utils.addShortcut;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,6 +54,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        findViewById(R.id.tv_hook).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                HookManager.hookAMS(MainActivity.this);
+
+                FlowCustomLog.d(LOG_TAG, "开始监听 === registerOutHook === 开始hook");
+
+                AMSInvocationHandler.intentRedirectListener = new AMSInvocationHandler.OnIntentRedirectListener() {
+                    @Override
+                    public boolean onExternalRedirect(Intent intent, String packageName, String componentName,
+                        Context context) {
+                        FlowCustomLog.d(LOG_TAG, "开始监听 === registerOutHook === 进行跳出拦截");
+
+                        return true;
+                    }
+                };
+            }
+        });
 
         // 长按
         if (VERSION.SDK_INT >= VERSION_CODES.N_MR1) {
