@@ -35,10 +35,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.taobao.xdemo.floating.FloatActivity;
+import com.taobao.xdemo.hook.AMSInvocationHandler;
+import com.taobao.xdemo.hook.ActivityTaskHook;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 import com.taobao.xdemo.utils.FlowCustomLog;
-import com.taobao.xdemo.utils.HookManager;
+import com.taobao.xdemo.hook.HookManager;
 import com.taobao.xdemo.utils.utils;
 import com.taobao.xdemo.utils.utils.FlowType;
 
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                HookManager.hookAMS(MainActivity.this);
+               /* HookManager.hookAMS(MainActivity.this);
 
                 FlowCustomLog.d(LOG_TAG, "开始监听 === registerOutHook === 开始hook");
 
@@ -71,7 +73,10 @@ public class MainActivity extends AppCompatActivity {
 
                         return true;
                     }
-                };
+                };*/
+
+                ActivityTaskHook taskHook = new ActivityTaskHook(getApplicationContext());
+                taskHook.hookService();
             }
         });
 

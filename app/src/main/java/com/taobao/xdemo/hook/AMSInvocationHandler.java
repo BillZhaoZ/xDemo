@@ -1,4 +1,4 @@
-package com.taobao.xdemo;
+package com.taobao.xdemo.hook;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
