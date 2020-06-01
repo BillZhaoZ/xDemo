@@ -15,6 +15,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+
+            <TextView
+                android:id="@+id/tv_rx_java"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:text="开始使用rxjava" />
+
             <TextView
                 android:id="@+id/tv_hook"
                 android:layout_width="wrap_content"

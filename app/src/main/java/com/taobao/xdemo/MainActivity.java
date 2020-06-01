@@ -1,6 +1,9 @@
 package com.taobao.xdemo;
 
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.TimeUnit;
 
 import com.alibaba.openid.OpenDeviceId;
 
@@ -17,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.drm.DrmStore.Action;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -26,6 +30,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,11 +43,13 @@ import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.hook.AMSInvocationHandler;
 import com.taobao.xdemo.hook.ActivityTaskHook;
 import com.taobao.xdemo.rom.romUtils;
+import com.taobao.xdemo.rxjava.RxJavaManager;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 import com.taobao.xdemo.utils.FlowCustomLog;
 import com.taobao.xdemo.hook.HookManager;
 import com.taobao.xdemo.utils.utils;
 import com.taobao.xdemo.utils.utils.FlowType;
+import io.reactivex.Scheduler;
 
 import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 import static com.taobao.xdemo.utils.utils.addShortcut;
@@ -56,6 +63,25 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        findViewById(R.id.tv_rx_java).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RxJavaManager rxJavaManager = new RxJavaManager();
+
+                // 1、Demo
+                //rxJavaManager.observable.subscribe(rxJavaManager.observer);
+
+                // 2.定时器
+                //rxJavaManager.observableTime.subscribe(rxJavaManager.observerTime);
+
+                // 3.指定范围
+                //rxJavaManager.observableRanger.subscribe(rxJavaManager.observerRanger);
+
+                // 4.flatmap
+                RxJavaManager.actionFlatMap();
+            }
+        });
 
         findViewById(R.id.tv_hook).setOnClickListener(new OnClickListener() {
             @Override
