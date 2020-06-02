@@ -1,9 +1,6 @@
 package com.taobao.xdemo;
 
 import java.util.HashMap;
-import java.util.Observable;
-import java.util.Observer;
-import java.util.concurrent.TimeUnit;
 
 import com.alibaba.openid.OpenDeviceId;
 
@@ -20,7 +17,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.drm.DrmStore.Action;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -30,7 +26,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.util.TimeUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -40,24 +35,25 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.taobao.xdemo.floating.FloatActivity;
-import com.taobao.xdemo.hook.AMSInvocationHandler;
 import com.taobao.xdemo.hook.ActivityTaskHook;
 import com.taobao.xdemo.rom.romUtils;
+import com.taobao.xdemo.rxjava.ErrorBean;
+import com.taobao.xdemo.rxjava.RxBusHelper;
 import com.taobao.xdemo.rxjava.RxJavaManager;
 import com.taobao.xdemo.smartlink.SnartLinkActivity;
 import com.taobao.xdemo.utils.FlowCustomLog;
-import com.taobao.xdemo.hook.HookManager;
 import com.taobao.xdemo.utils.utils;
 import com.taobao.xdemo.utils.utils.FlowType;
-import io.reactivex.Scheduler;
+import io.reactivex.disposables.CompositeDisposable;
 
-import static com.taobao.xdemo.floating.FloatActivity.LOG_TAG;
 import static com.taobao.xdemo.utils.utils.addShortcut;
 
 public class MainActivity extends AppCompatActivity {
 
     /*显示提示框按钮*/
     private Button showTips;
+
+    CompositeDisposable disposables = new CompositeDisposable();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +75,22 @@ public class MainActivity extends AppCompatActivity {
                 //rxJavaManager.observableRanger.subscribe(rxJavaManager.observerRanger);
 
                 // 4.flatmap
-                RxJavaManager.actionFlatMap();
+                //RxJavaManager.actionFlatMap();
+
+                RxBusHelper.post("hahahaha");
+
+                RxBusHelper.doOnMainThread(String.class, disposables, new RxBusHelper.OnEventListener<String>() {
+                    @Override
+                    public void onEvent(String s) {
+                        TextView viewById = findViewById(R.id.tv_rx_java);
+                        viewById.setText(s);
+                    }
+
+                    @Override
+                    public void onError(ErrorBean errorBean) {
+
+                    }
+                });
             }
         });
 
