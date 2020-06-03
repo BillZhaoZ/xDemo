@@ -12,7 +12,7 @@ object RxBusHelper {
      */
     @JvmStatic
     fun post(o: Any?) {
-        RxBus.getDefault().post(o)
+        RxBus.default.post(o)
     }
 
     /**
@@ -25,13 +25,13 @@ object RxBusHelper {
     </T> */
     fun <T> doOnMainThread(aClass: Class<T>?, disposables: CompositeDisposable,
                            listener: OnEventListener<T>) {
-        disposables.add(RxBus.getDefault().toFlowable(aClass).observeOn(AndroidSchedulers.mainThread())
+        disposables.add(RxBus.default.toFlowable(aClass).observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ t: T -> listener.onEvent(t) }
                 ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) })
     }
 
     fun <T> doOnMainThread(aClass: Class<T>?, listener: OnEventListener<T>) {
-        RxBus.getDefault().toFlowable(aClass).observeOn(AndroidSchedulers.mainThread()).subscribe({ t: T -> listener.onEvent(t) }
+        RxBus.default.toFlowable(aClass).observeOn(AndroidSchedulers.mainThread()).subscribe({ t: T -> listener.onEvent(t) }
         ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }
     }
 
@@ -45,13 +45,13 @@ object RxBusHelper {
     </T> */
     fun <T> doOnChildThread(aClass: Class<T>?, disposables: CompositeDisposable,
                             listener: OnEventListener<T>) {
-        disposables.add(RxBus.getDefault().toFlowable(aClass).subscribeOn(Schedulers.newThread())
+        disposables.add(RxBus.default.toFlowable(aClass).subscribeOn(Schedulers.newThread())
                 .subscribe({ t: T -> listener.onEvent(t) }
                 ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) })
     }
 
     fun <T> doOnChildThread(aClass: Class<T>?, listener: OnEventListener<T>) {
-        RxBus.getDefault().toFlowable(aClass).subscribeOn(Schedulers.newThread()).subscribe({ t: T -> listener.onEvent(t) }
+        RxBus.default.toFlowable(aClass).subscribeOn(Schedulers.newThread()).subscribe({ t: T -> listener.onEvent(t) }
         ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }
     }
 
