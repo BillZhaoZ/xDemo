@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 // 4.flatmap
                 //RxJavaManager.actionFlatMap();
 
-                RxBusHelper.post("hahahaha");
+               /* RxBusHelper.post("hahahaha");
 
                 RxBusHelper.doOnMainThread(String.class, disposables, new RxBusHelper.OnEventListener<String>() {
                     @Override
@@ -90,7 +91,42 @@ public class MainActivity extends AppCompatActivity {
                     public void onError(ErrorBean errorBean) {
 
                     }
-                });
+                });*/
+
+                String s =
+                    "https://equity.tmall.com/tm?spm=a2o5r.9022594.0"
+                        + ".0&agentId=636202&_bind=true&bc_fl_src=tmall_market_llb_1_800826&llbPlatform=_pube&llbOsd"
+                        + "=1&afc_userId=3571644191&scheme=tbopen&oldUserId=3571644191&deviceLevel=-1&hasLoginToken"
+                        + "=true&afc_id=afc_link%5Ecom.ss.android.ugc"
+                        + ".aweme%5Enbc%5Ee38b369b-820b-4e39-8f85-b9716321c6de_1591537622204&launchType=COLD&afcflow"
+                        + "=com.ss.android.ugc.aweme&isNeedHome=0&afcBackUrl=https%3A%2F%2Fm.taobao.com%2Findex"
+                        + ".htm%3Fscrollto%3Drecmd%26target%3Dguess%26recmdparams%3D%257b%2522tabindex%2522%253a0"
+                        + "%252c%2522bizparams%2522%253a%257b%2522outPushPlanId%2522%253a%25223YfuAj%2522%252c"
+                        + "%2522test%2522%253a%2522testvalue%2522%257d%257d%26tppabid%3D170722%26pvid%3D186e2043-4f26"
+                        + "-4fd6-9643-0d9caa3a95af%26bucketid%3DGuDing%26_afc_params_json%3D%257B%2522tppabid%2522"
+                        + "%253A%2522170722%2522%252C%2522appKey%2522%253A%2522wild_baichuanpingtai_appkey%2522%252C"
+                        + "%2522bc_fl_src%2522%253A%2522unknow%2522%252C%2522shopId%2522%253A%2522unknow%2522%257D"
+                        + "%26_afc_params_kv%3DappKey%2501wild_baichuanpingtai_appkey%2502bc_fl_src%2501unknow"
+                        + "%2502shopId%2501unknow%2502tppabid%2501170722%26launchType%3DCOLD";
+
+                Uri mUri = Uri.parse(s);
+                String afcBackUrl = mUri.getQueryParameter("afcBackUrl");
+
+                String targetUri = mUri.getQueryParameter("afcBackUrl");
+
+                String isNeedHome = mUri.getQueryParameter("isNeedHome");
+                Uri.Builder builder = Uri.parse(targetUri).buildUpon();
+
+                Uri isNeedHome1;
+
+                if (!TextUtils.isEmpty(isNeedHome)) {
+                    isNeedHome1 = builder.appendQueryParameter("isNeedHome", isNeedHome).build();
+                } else {
+                    isNeedHome1 = builder.build();
+                }
+
+                FlowCustomLog.d("Test", "TbFcLinkInit === oaid= " + isNeedHome1);
+
             }
         });
 
