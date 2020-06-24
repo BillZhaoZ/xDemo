@@ -61,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            String main = getIntent().getExtras().getString("main");
+            Toast.makeText(this, main, Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         findViewById(R.id.tv_rx_java).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
