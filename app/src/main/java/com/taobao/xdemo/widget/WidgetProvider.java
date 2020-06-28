@@ -14,6 +14,10 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 import com.taobao.xdemo.MainActivity;
 import com.taobao.xdemo.R;
+import com.taobao.xdemo.TimeActivity;
+import com.taobao.xdemo.notification.NotificationBroadcastReceiver;
+import com.taobao.xdemo.utils.FlowCustomLog;
+import kotlin.UByte;
 
 /**
  * @author bill
@@ -27,8 +31,6 @@ public class WidgetProvider extends AppWidgetProvider {
     // 保存 widget 的id的HashSet，每新建一个 widget 都会为该 widget 分配一个 id。
     private static Set idsSet = new HashSet();
 
-    public static int mIndex;
-
     /**
      * 接收窗口小部件点击时发送的广播
      */
@@ -36,18 +38,10 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
         final String action = intent.getAction();
-/*
-        if (ACTION_UPDATE_ALL.equals(action)) {
-            // “更新”广播
-            updateAllAppWidgets(context, AppWidgetManager.getInstance(context), idsSet);
-        } else if (intent.hasCategory(Intent.CATEGORY_ALTERNATIVE)) {
-            // “按钮点击”广播
-            mIndex = 0;
-            updateAllAppWidgets(context, AppWidgetManager.getInstance(context), idsSet);
-        }*/
+
+        FlowCustomLog.d("WidgetProvider", "onReceive === 接收窗口小部件点击时发送的广播 ");
 
         updateAllAppWidgets(context, AppWidgetManager.getInstance(context), idsSet);
-
     }
 
     // 更新所有的 widget
@@ -57,8 +51,7 @@ public class WidgetProvider extends AppWidgetProvider {
         // 迭代器，用于遍历所有保存的widget的id
         Iterator it = set.iterator();
 
-        // 要显示的那个数字，每更新一次 + 1
-        mIndex++; // TODO:可以在这里做更多的逻辑操作，比如：数据处理、网络请求等。然后去显示数据
+        // TODO:可以在这里做更多的逻辑操作，比如：数据处理、网络请求等。然后去显示数据
 
         while (it.hasNext()) {
             appID = ((Integer)it.next()).intValue();
@@ -74,15 +67,26 @@ public class WidgetProvider extends AppWidgetProvider {
         }
     }
 
+    public static String NOTICE_ID_KEY = "NOTICE_ID";
+    public static String ACTION_CLOSE_NOTICE = "com.taobao.action.close.notice";
+
     /**
      * 获取 打开 MainActivity 的 PendingIntent
      */
     private PendingIntent getOpenPendingIntent(Context context) {
-        Intent intent = new Intent();
-        intent.setClass(context, MainActivity.class);
+        //intent.setClass(context, TimeActivity.class);
+
+        Intent intent = new Intent(context, WidgetBroadcastReceiver.class);
+
         intent.putExtra("main", "这句话是我从桌面点开传过去的。");
-        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
-        return pi;
+        //PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
+
+        intent.putExtra(NOTICE_ID_KEY, ACTION_CLOSE_NOTICE);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent,
+            PendingIntent.FLAG_UPDATE_CURRENT);
+
+        return pendingIntent;
     }
 
     /**
@@ -94,7 +98,8 @@ public class WidgetProvider extends AppWidgetProvider {
         //Intent intent = new Intent(context, WidgetService.class);
         //context.startService(intent);
 
-        Toast.makeText(context, "快来点击看看，，，", Toast.LENGTH_SHORT).show();
+        FlowCustomLog.d("WidgetProvider", "onEnabled === 窗口小部件第一次添加到桌面");
+
         super.onEnabled(context);
     }
 
@@ -103,6 +108,8 @@ public class WidgetProvider extends AppWidgetProvider {
     public void onAppWidgetOptionsChanged(Context context, AppWidgetManager appWidgetManager, int appWidgetId, Bundle
         newOptions) {
         super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions);
+
+        FlowCustomLog.d("WidgetProvider", "onAppWidgetOptionsChanged === 初次添加小窗口，或者小窗口大小被改变。。。");
     }
 
     /**
@@ -111,6 +118,8 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onRestored(Context context, int[] oldWidgetIds, int[] newWidgetIds) {
         super.onRestored(context, oldWidgetIds, newWidgetIds);
+
+        FlowCustomLog.d("WidgetProvider", "onRestored === 恢复小窗口。。。");
     }
 
     /**
@@ -119,6 +128,9 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
+
+        FlowCustomLog.d("WidgetProvider", "onUpdate === 小窗口被点击了 = " + appWidgetIds);
+
         // 每次 widget 被创建时，对应的将widget的id添加到set中
         for (int appWidgetId : appWidgetIds) {
             idsSet.add(Integer.valueOf(appWidgetId));
@@ -130,6 +142,8 @@ public class WidgetProvider extends AppWidgetProvider {
      */
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
+        FlowCustomLog.d("WidgetProvider", "onDeleted === 小窗口被删除了 = " + appWidgetIds);
+
         // 当 widget 被删除时，对应的删除set中保存的widget的id
         for (int appWidgetId : appWidgetIds) {
             idsSet.remove(Integer.valueOf(appWidgetId));
@@ -142,6 +156,8 @@ public class WidgetProvider extends AppWidgetProvider {
      */
     @Override
     public void onDisabled(Context context) {
+        FlowCustomLog.d("WidgetProvider", "onDeleted === 最后一个小窗口被删除了");
+
         // 在最后一个 widget 被删除时，终止服务
         Intent intent = new Intent(context, WidgetService.class);
         context.stopService(intent);

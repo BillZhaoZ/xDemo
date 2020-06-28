@@ -87,6 +87,12 @@
             </intent-filter>
         </service>
 
+        <!-- 接收通知点击的相应操作 -->
+        <receiver android:name=".widget.WidgetBroadcastReceiver">
+            <intent-filter>
+                <action android:name="cn.campusapp.action.closenotic" />
+            </intent-filter>
+        </receiver>
 
     </application>
 
