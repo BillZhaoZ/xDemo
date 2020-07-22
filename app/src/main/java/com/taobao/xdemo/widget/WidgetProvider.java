@@ -37,8 +37,6 @@ public class WidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(final Context context, Intent intent) {
         super.onReceive(context, intent);
-        final String action = intent.getAction();
-
         FlowCustomLog.d("WidgetProvider", "onReceive === 接收窗口小部件点击时发送的广播 ");
 
         updateAllAppWidgets(context, AppWidgetManager.getInstance(context), idsSet);

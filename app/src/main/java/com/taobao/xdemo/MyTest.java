@@ -1,12 +1,11 @@
 package com.taobao.xdemo;
 
-import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
-import android.net.Uri;
+import com.alibaba.fastjson.JSON;
 
 /**
  * @author bill
@@ -16,30 +15,75 @@ import android.net.Uri;
 public class MyTest {
 
     public static void main(String[] args) {
-        //hashmap();
 
-       /* List<String> idList = new ArrayList<>();
-        idList.add("ssss");
-        idList.add("sssswwwwwwwwwwsss");
+        ResourceBean resourceBean = JSON.parseObject(DEFAULT_JSON, ResourceBean.class);
 
-        getActivityId(idList);*/
+    }
 
-        String s =
-            "https%3A%2F%2Fm.taobao.com%2Findex.htm%3Fscrollto%3Drecmd%26target%3Dguess%26recmdparams%3D%257b"
-                + "%2522tabindex%2522%253a0%252c%2522bizparams%2522%253a%257b%2522outPushPlanId%2522%253a%25223YfuAj"
-                + "%2522%252c%2522test%2522%253a%2522testvalue%2522%257d%257d%26tppabid%3D170722%26pvid%3D33db1135"
-                + "-7edf-48c4-a847-f8ca68e8cc4b%26bucketid%3DGuDing%26_afc_params_json%3D%257B%2522tppabid%2522%253A"
-                + "%2522170722%2522%252C%2522appKey%2522%253A%252223262200%2522%252C%2522bc_fl_src%2522%253A"
-                + "%2522bc_ultimate_android%2522%252C%2522shopId%2522%253A%2522unknow%2522%257D%26_afc_params_kv"
-                + "%3DappKey%250123262200%2502bc_fl_src%2501bc_ultimate_android%2502shopId%2501unknow%2502tppabid"
-                + "%2501170722%26launchType%3DCOLD";
 
-        Uri parse = Uri.parse(s);
+    String DEFAULT_JSON = "{\"items\":[{\"data\":{\"entries\":[{\"bizCode\":\"widget_coin\",\"stateful\":\"true\","
+        + "\"title\":\"领金币\",\"url\":\"https://market.m.taobao.com/app/tmall-wireless/tjb-2018/index/index"
+        + ".html?disableNav=YES\"},{\"bizCode\":\"widget_logistic\",\"stateful\":\"true\",\"title\":\"查物流\","
+        + "\"url\":\"https://m.duanqu.com?_wml_code=vvslIPG4dzypz9NyrjCAq5IPalrXJLavIpXHcBKguXM%3D&_ariver_appid"
+        + "=11509317&query=from%3Dlittletool&from=littletool\"},{\"bizCode\":\"widget_order\",\"stateful\":\"false\","
+        + "\"title\":\"查订单\",\"url\":\"http://tm.m.taobao.com/list.htm?OrderListType=total_orders\"}],"
+        + "\"keyword\":\"半身裙\",\"promotionBizCode\":\"widget_promotion\",\"promotionIcon\":\"https://gw.alicdn"
+        + ".com/tfs/TB1_IKgwW61gK0jSZFlXXXDKFXa-72-72.png\",\"promotionText\":\"翻倍赚金币\","
+        + "\"promotionUrl\":\"https://market.m.taobao.com/app/tmall-wireless/tjb-2018/index/index"
+        + ".html?disableNav=YES\",\"searchUrl\":\"http://s.m.taobao.com/h5?q=%E5%8D%8A%E8%BA%AB%E8%A3%99\"},"
+        + "\"type\":\"2\"}]}";
 
-        String afcBackUrl = parse.getQueryParameter("afcBackUrl");
+    /**
+     * 将url参数转换成map
+     *
+     * @param param aa=11&bb=22&cc=33
+     * @return
+     */
+    public static Map<String, Object> getUrlParams(String param) {
+        Map<String, Object> map = new HashMap<>(0);
+        String[] params = param.split("&");
 
-        System.out.println("dayin: " + afcBackUrl);
+        for (int i = 0; i < params.length; i++) {
+            String[] p = params[i].split("=");
+            if (p.length == 2) {
+                map.put(p[0], p[1]);
+            }
+        }
 
+        return map;
+    }
+
+    private static void reWriteAfcId(String landingUrl, String channel, boolean isGrowthWord, String clipBoard) {
+        try {
+            //String afcId = UTAnalytics.getInstance().getDefaultTracker().getGlobalProperty("_afc_id");
+            String afcId
+                = "afc_launch^com.taobao.taobao^1012_Initiactive^83880b2c-7c52-4236-a126-b502dee083bd_1594692743912";
+
+            String[] split = afcId.split("\\^");
+            split[1] = channel;
+
+            if (landingUrl.contains("bc_fl_src")) {
+                Map<String, Object> urlParams = getUrlParams(landingUrl);
+
+                String bc_fl_src = (String)urlParams.get("bc_fl_src");
+                split[2] = bc_fl_src;
+            } else {
+                split[2] = isGrowthWord ? clipBoard : "dahanghai";
+            }
+
+            StringBuffer stringBuffer = new StringBuffer();
+
+            for (String s : split) {
+                stringBuffer.append(s).append("^");
+            }
+
+            System.out.println("afc_id: " + stringBuffer);
+
+            //UTAnalytics.getInstance().getDefaultTracker().setGlobalProperty("_afc_id", afcId);
+
+        } catch (Exception e) {
+            System.out.println("afc_id:异常 " + e);
+        }
     }
 
     private static String getActivityId(List<String> idList) {
