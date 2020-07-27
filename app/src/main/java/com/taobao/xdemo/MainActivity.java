@@ -61,13 +61,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // ATTENTION: This was auto-generated to handle app links.
+        Intent appLinkIntent = getIntent();
+        String appLinkAction = appLinkIntent.getAction();
+        Uri appLinkData = appLinkIntent.getData();
+
+        if (appLinkData != null && appLinkData.toString().contains("tbuserlink.oss-cn-hangzhou.aliyuncs.com")) {
+            startActivity(new Intent(this, AppLinksActivity.class));
+        }
+
         try {
             String main = getIntent().getExtras().getString("main");
             Toast.makeText(this, main, Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
         findViewById(R.id.tv_rx_java).setOnClickListener(new OnClickListener() {
             @Override

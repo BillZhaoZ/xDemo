@@ -16,10 +16,7 @@ public class MyTest {
 
     public static void main(String[] args) {
 
-        ResourceBean resourceBean = JSON.parseObject(DEFAULT_JSON, ResourceBean.class);
-
     }
-
 
     String DEFAULT_JSON = "{\"items\":[{\"data\":{\"entries\":[{\"bizCode\":\"widget_coin\",\"stateful\":\"true\","
         + "\"title\":\"领金币\",\"url\":\"https://market.m.taobao.com/app/tmall-wireless/tjb-2018/index/index"

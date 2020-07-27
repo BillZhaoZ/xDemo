@@ -18,7 +18,6 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
@@ -30,6 +29,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+
+
+        <!--  https://tbuserlink.oss-cn-hangzhou.aliyuncs.com/-->
+
+        <activity
+            android:name=".AppLinksActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+
         <activity android:name=".TimeActivity" />
         <activity android:name=".AidlTestActivity" />
         <activity android:name=".MainActivity">
@@ -37,6 +45,17 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="tbuserlink.oss-cn-hangzhou.aliyuncs.com"
+                    android:scheme="https" />
             </intent-filter>
 
             <!--
@@ -62,38 +81,32 @@
             android:theme="@style/TransparentTheme" />
 
         <service android:name=".floating.FloatWindowService" />
-        <service android:name=".notification.NotificationService" />
-
-
-        <!-- 声明widget对应的AppWidgetProvider -->
+        <service android:name=".notification.NotificationService" /> <!-- 声明widget对应的AppWidgetProvider -->
         <receiver android:name=".widget.WidgetProvider">
             <intent-filter>
-                <!--这个是必须要有的系统规定-->
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
-                <!--这个是我们自定义的 action ，用来更新UI，还可以自由添加更多 -->
-                <action android:name="com.lyl.widget.UPDATE_ALL"/>
+
+                <!-- 这个是必须要有的系统规定 -->
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <!-- 这个是我们自定义的 action ，用来更新UI，还可以自由添加更多 -->
+                <action android:name="com.lyl.widget.UPDATE_ALL" />
             </intent-filter>
-            <!--要显示的布局-->
+            <!-- 要显示的布局 -->
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget"/>
-        </receiver>
-
-        <!-- 用来计时，发送 通知桌面部件更新 -->
-        <service android:name=".widget.WidgetService" >
+                android:resource="@xml/app_widget" />
+        </receiver> <!-- 用来计时，发送 通知桌面部件更新 -->
+        <service android:name=".widget.WidgetService">
             <intent-filter>
-                <!--用来启动服务-->
+
+                <!-- 用来启动服务 -->
                 <action android:name="android.appwidget.action.APP_WIDGET_SERVICE" />
             </intent-filter>
-        </service>
-
-        <!-- 接收通知点击的相应操作 -->
+        </service> <!-- 接收通知点击的相应操作 -->
         <receiver android:name=".widget.WidgetBroadcastReceiver">
             <intent-filter>
                 <action android:name="cn.campusapp.action.closenotic" />
             </intent-filter>
         </receiver>
-
     </application>
 
 </manifest>
