@@ -40,6 +40,8 @@
 
         <activity android:name=".TimeActivity" />
         <activity android:name=".AidlTestActivity" />
+
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +49,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter android:autoVerify="true">
+            <intent-filter
+                android:autoVerify="true"
+                tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -58,17 +62,41 @@
                     android:scheme="https" />
             </intent-filter>
 
-            <!--
-                <meta-data
-                android:name="android.app.shortcuts"
-                android:resource="@xml/shortcut" />
-            -->
-
         </activity>
+
         <activity
             android:name=".smartlink.SnartLinkActivity"
-            android:exported="true" />
-        <activity android:name=".floating.FloatActivity" />
+            android:exported="true">
+
+            <intent-filter>
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="aliyuncs.com"
+                    android:scheme="https" />
+            </intent-filter>
+
+        </activity>
+
+
+        <activity android:name=".floating.FloatActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="tmall.test.com"
+                    android:scheme="https" />
+            </intent-filter>
+
+        </activity>
 
         <receiver android:name=".notification.NotificationBroadcastReceiver">
             <intent-filter>
