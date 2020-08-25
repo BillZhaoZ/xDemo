@@ -16,6 +16,10 @@ public class MyTest {
 
     public static void main(String[] args) {
 
+        String abc = null;
+
+        abc = null;
+
     }
 
     String DEFAULT_JSON = "{\"items\":[{\"data\":{\"entries\":[{\"bizCode\":\"widget_coin\",\"stateful\":\"true\","

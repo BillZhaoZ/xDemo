@@ -58,7 +58,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="tbuserlink.oss-cn-hangzhou.aliyuncs.com"
+                    android:host="ace.tb.cn"
                     android:scheme="https" />
             </intent-filter>
 
@@ -68,33 +68,10 @@
             android:name=".smartlink.SnartLinkActivity"
             android:exported="true">
 
-            <intent-filter>
-
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="aliyuncs.com"
-                    android:scheme="https" />
-            </intent-filter>
-
         </activity>
 
 
         <activity android:name=".floating.FloatActivity">
-
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="tmall.test.com"
-                    android:scheme="https" />
-            </intent-filter>
 
         </activity>
 
