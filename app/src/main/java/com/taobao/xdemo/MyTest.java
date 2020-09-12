@@ -1,11 +1,16 @@
 package com.taobao.xdemo;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+
+import android.content.Context;
+import android.text.TextUtils;
 
 /**
  * @author bill
@@ -15,11 +20,102 @@ import com.alibaba.fastjson.JSON;
 public class MyTest {
 
     public static void main(String[] args) {
+        isInRequestPeriod();
+    }
 
-        String abc = null;
+    private static boolean isInRequestPeriod() {
+        String config = "01:45-23:15";
 
-        abc = null;
+        String[] split = config.split("-");
+        String s1 = split[0];
+        String s2 = split[1];
 
+        //String now = getCurrentHHMM();
+        String now = "01:16";
+
+        int i1 = now.compareTo(s1);
+        int i2 = now.compareTo(s2);
+
+        System.out.println("config=" + config + " now=" + now + "   s1=" + s1 + "  s2=" + s2);
+        System.out.println("i1=" + i1 + "  i2=" + i2);
+
+        if (i1 > 0 && i2 < 0) {
+            System.out.println("当前时间点在config范围内：" + true);
+            return true;
+        }
+
+        System.out.println("当前时间点在config范围内：" + false);
+
+        return false;
+    }
+
+    public static String getCurrentHHMM() {
+        Calendar instance = Calendar.getInstance();
+        int hour = instance.get(Calendar.HOUR_OF_DAY);
+        int minute = instance.get(Calendar.MINUTE);
+        return String.format("%02d:%02d", hour, minute);
+    }
+
+    public static int compareVersion(String version1, String version2) {
+        /*if (TextUtils.equals(version1, version2)) {
+            return 0;
+        }*/
+
+        String[] version1Array = version1.split("\\.");
+        String[] version2Array = version2.split("\\.");
+
+        int index = 0;
+        // 获取最小长度值
+        int minLen = Math.min(version1Array.length, version2Array.length);
+        int diff = 0;
+
+        // 循环判断每位的大小
+        while (index < minLen
+            && (diff = Integer.parseInt(version1Array[index])
+            - Integer.parseInt(version2Array[index])) == 0) {
+            index++;
+        }
+        if (diff == 0) {
+            // 如果位数不一致，比较多余位数
+            for (int i = index; i < version1Array.length; i++) {
+                if (Integer.parseInt(version1Array[i]) > 0) {
+                    return 1;
+                }
+            }
+
+            for (int i = index; i < version2Array.length; i++) {
+                if (Integer.parseInt(version2Array[i]) > 0) {
+                    return -1;
+                }
+            }
+            return 0;
+        } else {
+            return diff > 0 ? 1 : -1;
+        }
+    }
+
+    /**
+     * 功能描述：返回分
+     *
+     * @param date 日期
+     * @return 返回分钟
+     */
+    public static int getMinute(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.MINUTE);
+    }
+
+    /**
+     * 功能描述：返回小
+     *
+     * @param date 日期
+     * @return 返回小时
+     */
+    public static int getHour(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.HOUR_OF_DAY);
     }
 
     String DEFAULT_JSON = "{\"items\":[{\"data\":{\"entries\":[{\"bizCode\":\"widget_coin\",\"stateful\":\"true\","

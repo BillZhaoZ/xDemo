@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import com.bun.miitmdid.core.JLibrary;
+import com.taobao.xdemo.hook.ActivityTaskHook;
+import com.taobao.xdemo.hook.Reflection;
 import com.taobao.xdemo.oaid.MiitHelper;
 import com.taobao.xdemo.utils.utils;
 
@@ -39,6 +41,12 @@ public class MyApplication extends Application implements Application.ActivityLi
         //获取OAID等设备标识符
         MiitHelper miitHelper = new MiitHelper(appIdsUpdater);
         miitHelper.getDeviceIds(getApplicationContext());
+
+
+        // hook 此句需要添加  https://blog.csdn.net/u014379448/article/details/106299656?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~all~first_rank_v2~rank_v25-2-106299656.nonecase&utm_term=activity%20hook%20%E5%AE%89%E5%8D%93
+       /* Reflection.unseal(getApplicationContext());
+        ActivityTaskHook taskHook = new ActivityTaskHook(getApplicationContext());
+        taskHook.hookService();*/
     }
 
     public static boolean isSupportOaid() {
@@ -80,7 +88,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         /*Activity不为空并且没有被释放掉*/
         if (this.activity != null && !this.activity.isFinishing()) {
             /*获取Activity顶层视图,并添加自定义View*/
-            ((ViewGroup) this.activity.getWindow().getDecorView()).addView(view);
+            ((ViewGroup)this.activity.getWindow().getDecorView()).addView(view);
         }
     }
 
@@ -93,7 +101,7 @@ public class MyApplication extends Application implements Application.ActivityLi
         /*Activity不为空并且没有被释放掉*/
         if (this.activity != null && !this.activity.isFinishing()) {
             /*获取Activity顶层视图*/
-            ViewGroup root = ((ViewGroup) this.activity.getWindow().getDecorView());
+            ViewGroup root = ((ViewGroup)this.activity.getWindow().getDecorView());
             /*如果Activity中存在View对象则删除*/
             if (root.indexOfChild(view) != -1) {
                 /*从顶层视图中删除*/

@@ -47,6 +47,9 @@ public class ActivityTaskHook {
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+            Log.e(TAG, "invoke: ActivityTaskHookHandler ");
+
             if ("startActivity".contains(method.getName())) {
                 Intent intent = null;
                 int intentIndex = 0;

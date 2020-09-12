@@ -13,8 +13,10 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -23,6 +25,7 @@ import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -36,7 +39,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.taobao.xdemo.floating.FloatActivity;
+import com.taobao.xdemo.hook.AMSInvocationHandler;
 import com.taobao.xdemo.hook.ActivityTaskHook;
+import com.taobao.xdemo.hook.HookManager;
+import com.taobao.xdemo.hook.Reflection;
 import com.taobao.xdemo.rom.romUtils;
 import com.taobao.xdemo.rxjava.ErrorBean;
 import com.taobao.xdemo.rxjava.RxBusHelper;
@@ -47,6 +53,7 @@ import com.taobao.xdemo.utils.utils;
 import com.taobao.xdemo.utils.utils.FlowType;
 import io.reactivex.disposables.CompositeDisposable;
 
+import static com.taobao.flowcustoms.afc.AFCCustomSDK.LOG_TAG;
 import static com.taobao.xdemo.utils.utils.addShortcut;
 
 public class MainActivity extends AppCompatActivity {
@@ -76,6 +83,28 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        findViewById(R.id.tv_channel).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "点击了", Toast.LENGTH_LONG).show();
+
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName("com.taobao.taobao", "com.taobao.accs.ChannelService");
+                intent.setComponent(componentName);
+                bindService(intent, new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                }, Context.BIND_AUTO_CREATE);
+            }
+        });
 
         findViewById(R.id.tv_rx_java).setOnClickListener(new OnClickListener() {
             @Override
@@ -164,8 +193,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 };*/
 
-                ActivityTaskHook taskHook = new ActivityTaskHook(getApplicationContext());
-                taskHook.hookService();
             }
         });
 
