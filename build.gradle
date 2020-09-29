@@ -17,7 +17,7 @@ buildscript {
         //配置Android annotations
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.kageiit:robojava-plugin:1.2.2'
-        classpath 'de.undercouch:gradle-download-task:3.2.0'
+        classpath 'de.undercouch:gradle-download-task:4.0.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }

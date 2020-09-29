@@ -29,12 +29,12 @@ object RxBusHelper {
                            listener: OnEventListener<T>) {
         RxBus.default?.toFlowable(aClass)?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe({ t: T -> listener.onEvent(t) }
-                ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }?.let { disposables.add(it) }
+                ) { listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }?.let { disposables.add(it) }
     }
 
     fun <T> doOnMainThread(aClass: Class<T>?, listener: OnEventListener<T>) {
         RxBus.default?.toFlowable(aClass)?.observeOn(AndroidSchedulers.mainThread())?.subscribe({ t: T -> listener.onEvent(t) }
-        ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }
+        ) { listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }
     }
 
     /**
@@ -49,12 +49,12 @@ object RxBusHelper {
                             listener: OnEventListener<T>) {
         RxBus.default?.toFlowable(aClass)?.subscribeOn(Schedulers.newThread())
                 ?.subscribe({ t: T -> listener.onEvent(t) }
-                ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }?.let { disposables.add(it) }
+                ) { listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }?.let { disposables.add(it) }
     }
 
     fun <T> doOnChildThread(aClass: Class<T>?, listener: OnEventListener<T>) {
         RxBus.default?.toFlowable(aClass)?.subscribeOn(Schedulers.newThread())?.subscribe({ t: T -> listener.onEvent(t) }
-        ) { throwable: Throwable? -> listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }
+        ) { listener.onError(ErrorBean(ErrorCode.ERROR_CODE_RXBUS, ErrorCode.ERROR_DESC_RXBUS)) }
     }
 
     interface OnEventListener<T> {

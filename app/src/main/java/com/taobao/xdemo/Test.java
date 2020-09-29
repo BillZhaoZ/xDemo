@@ -1,9 +1,5 @@
 package com.taobao.xdemo;
 
-import android.text.TextUtils;
-
-import com.alibaba.alibclinkpartner.smartlink.ALSLSmartLinkSDK;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
