@@ -36,6 +36,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import com.taobao.xdemo.floating.FloatActivity;
@@ -68,6 +69,31 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.tv_test).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName("com.taobao.taobao",
+                    "com.taobao.linkmanager.LinkService");
+                intent.setComponent(componentName);
+                intent.putExtra("url",
+                    "https://huodong.taobao.com/wow/a/act/tao/dailygroup/751/wupr?wh_pid=daily-185392&floorId=8417404"
+                        + "&itemIds=534597828259&spm=a218nj.14512589");
+                bindService(intent, new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                }, Context.BIND_AUTO_CREATE);
+            }
+        });
+
         // ATTENTION: This was auto-generated to handle app links.
         Intent appLinkIntent = getIntent();
         String appLinkAction = appLinkIntent.getAction();
@@ -83,6 +109,19 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        findViewById(R.id.tv_imei).setOnClickListener(new OnClickListener() {
+            @RequiresApi(api = VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                String imei = MyUtils.getIMEIIndex(MainActivity.this, 0);
+                String imei2 = MyUtils.getIMEIIndex(MainActivity.this, 1);
+                String imeiCard = MyUtils.getImeiCard(MainActivity.this);
+
+                Toast.makeText(MainActivity.this,
+                    "imei1:" + imei + "----imei2:" + imei2 + "  卡槽数：" + imeiCard, Toast.LENGTH_LONG).show();
+            }
+        });
 
         findViewById(R.id.tv_channel).setOnClickListener(new OnClickListener() {
             @Override
@@ -440,27 +479,6 @@ public class MainActivity extends AppCompatActivity {
                 Uri.parse("package:" + context.getPackageName()));
             startActivityForResult(intent, 5004);
         }
-    }
-
-    private static String sReadPhoneState = Manifest.permission.READ_PHONE_STATE;
-
-    public static String getIMEI(Context context) {
-        if (context == null) {
-            return "";
-        }
-
-        try {
-            TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(context, sReadPhoneState) == PackageManager.PERMISSION_GRANTED) {
-                return telephonyManager.getDeviceId();
-            } else {
-                ActivityCompat.requestPermissions((Activity)context, new String[] {sReadPhoneState}, 122);
-            }
-        } catch (Exception e) {
-
-        }
-
-        return "";
     }
 
 }
