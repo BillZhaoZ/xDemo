@@ -1,12 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true">
+    <debug-overrides>
         <trust-anchors>
-            <certificates
-                overridePins="true"
-                src="system" />
-            <certificates
-                overridePins="true"
-                src="user" />
+            <!-- Trust user added CAs while debuggable only -->
+            <certificates src="user" />
         </trust-anchors>
-    </base-config>
+    </debug-overrides>
+
+    <!--<domain-config>
+        <domain includeSubdomains="true">digitalassetlinks.googleapis.com</domain>
+        <trust-anchors>
+            <certificates src="@raw/chls"/>
+        </trust-anchors>
+    </domain-config>-->
+
 </network-security-config>
