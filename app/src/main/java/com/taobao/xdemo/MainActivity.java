@@ -1,5 +1,6 @@
 package com.taobao.xdemo;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 import com.alibaba.openid.OpenDeviceId;
@@ -28,12 +29,14 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.RequiresApi;
@@ -59,38 +62,57 @@ import static com.taobao.xdemo.utils.utils.addShortcut;
 
 public class MainActivity extends AppCompatActivity {
 
-    /*显示提示框按钮*/
-    private Button showTips;
+    private String reflectGetReferrer() {
+        try {
+            Class activityClass = Class.forName("android.app.Activity");
 
-    CompositeDisposable disposables = new CompositeDisposable();
+            Field refererField = activityClass.getDeclaredField("mReferrer");
+            refererField.setAccessible(true);
+            String referrer = (String)refererField.get(MainActivity.this);
+            return referrer;
+        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+            return "No referrer";
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        EditText test = (EditText)findViewById(R.id.tv_share);
+
         findViewById(R.id.tv_test).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                String s = reflectGetReferrer();
+                Log.d("luming", s);
 
-                Intent intent = new Intent();
-                ComponentName componentName = new ComponentName("com.taobao.taobao",
-                    "com.taobao.linkmanager.LinkService");
-                intent.setComponent(componentName);
-                intent.putExtra("url",
-                    "https://huodong.taobao.com/wow/a/act/tao/dailygroup/751/wupr?wh_pid=daily-185392&floorId=8417404"
-                        + "&itemIds=534597828259&spm=a218nj.14512589");
-                bindService(intent, new ServiceConnection() {
-                    @Override
-                    public void onServiceConnected(ComponentName name, IBinder service) {
+                String text = test.getText().toString();
 
-                    }
+                // 指定分享到微信
+                /*Intent wechatIntent = new Intent(Intent.ACTION_SEND);
+                //wechatIntent.setPackage("com.tencent.mm");
+                wechatIntent.setClassName("com.ss.android.ugc.aweme", "com.p152ss.android.ugc.sdk.communication
+                .EntryActivity");
 
-                    @Override
-                    public void onServiceDisconnected(ComponentName name) {
+                wechatIntent.setType("text/html");
+                wechatIntent.putExtra(Intent.EXTRA_TEXT, text);
+                wechatIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(wechatIntent);*/
 
-                    }
-                }, Context.BIND_AUTO_CREATE);
+             /*   // 调用系统分享
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                startActivity(Intent.createChooser(intent, text));*/
+
+              /*  Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setClassName("com.huawei.hitouch", "com.huawei.hitouch.HiTouchMainActivity");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);*/
+
             }
         });
 
