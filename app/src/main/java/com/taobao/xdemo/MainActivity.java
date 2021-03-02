@@ -20,6 +20,8 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
@@ -28,6 +30,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -42,6 +45,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
 import com.taobao.xdemo.floating.FloatActivity;
 import com.taobao.xdemo.hook.AMSInvocationHandler;
 import com.taobao.xdemo.hook.ActivityTaskHook;
@@ -86,10 +90,29 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.tv_test).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                String s = reflectGetReferrer();
-                Log.d("luming", s);
 
-                String text = test.getText().toString();
+                Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.cccc);
+                Uri imageUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
+
+                Intent wechatIntent = new Intent(Intent.ACTION_SEND);
+                //wechatIntent.setPackage("com.tencent.mm");
+                ComponentName cop = new ComponentName("com.tencent.mm","com.tencent.mm.ui.tools.ShareImgUI");
+                wechatIntent.setComponent(cop);
+                wechatIntent.setType("image/*");
+                wechatIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                wechatIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                startActivity(wechatIntent);
+                //startActivity(Intent.createChooser(wechatIntent, "Share"));
+
+                // 修改字体
+                String password = "9₤PIoEcyRbqf9₤ https://m.tb.cn/h.4Ph3KSR 财神到赢好礼";
+                Log.d("luming", (char)30 + password);
+
+
+               /* String s = reflectGetReferrer();
+                Log.d("luming", "获取的包名是："+ s);
+
+                String text = test.getText().toString();*/
 
                 // 指定分享到微信
                 /*Intent wechatIntent = new Intent(Intent.ACTION_SEND);
