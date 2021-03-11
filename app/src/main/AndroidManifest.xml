@@ -28,13 +28,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <!-- https://tbuserlink.oss-cn-hangzhou.aliyuncs.com/ -->
+
         <activity
             android:name=".AppLinksActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait">
 
-            <!--
              <intent-filter android:autoVerify="true">
                  <action android:name="android.intent.action.VIEW" />
 
@@ -42,13 +43,13 @@
                  <category android:name="android.intent.category.BROWSABLE" />
 
                  <data
-                     android:host="tbuserlink.oss-accelerate.aliyuncs.com"
+                     android:host="f6yvz7.biz"
                      android:path="/index.html"
                      android:scheme="https" />
              </intent-filter>
-            -->
 
-            <intent-filter>
+
+          <!--  <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -58,7 +59,7 @@
                     android:host="tbuserlink.oss-accelerate.aliyuncs.com"
                     android:path="/index.html"
                     android:scheme="https" />
-            </intent-filter>
+            </intent-filter>-->
         </activity>
 
 

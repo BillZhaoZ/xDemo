@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
             Field refererField = activityClass.getDeclaredField("mReferrer");
             refererField.setAccessible(true);
-            String referrer = (String)refererField.get(MainActivity.this);
+            String referrer = (String) refererField.get(MainActivity.this);
             return referrer;
         } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
@@ -85,13 +85,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        EditText test = (EditText)findViewById(R.id.tv_share);
+        EditText test = (EditText) findViewById(R.id.tv_share);
 
         findViewById(R.id.tv_test).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.cccc);
+                String text = test.getText().toString();
+
+              /*  Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.cccc);
                 Uri imageUri = Uri.parse(MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, null, null));
 
                 Intent wechatIntent = new Intent(Intent.ACTION_SEND);
@@ -101,13 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 wechatIntent.setType("image/*");
                 wechatIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 wechatIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
-                startActivity(wechatIntent);
+                startActivity(wechatIntent);*/
                 //startActivity(Intent.createChooser(wechatIntent, "Share"));
-
-                // 修改字体
-                String password = "9₤PIoEcyRbqf9₤ https://m.tb.cn/h.4Ph3KSR 财神到赢好礼";
-                Log.d("luming", (char)30 + password);
-
 
                /* String s = reflectGetReferrer();
                 Log.d("luming", "获取的包名是："+ s);
@@ -125,14 +122,19 @@ public class MainActivity extends AppCompatActivity {
                 wechatIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(wechatIntent);*/
 
-             /*   // 调用系统分享
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_TEXT, text);
-                startActivity(Intent.createChooser(intent, text));*/
+                // 调用系统分享
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                intent.setType("text/plain");
+//                intent.setPackage("com.tencent.mm");
 
-              /*  Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setClassName("com.huawei.hitouch", "com.huawei.hitouch.HiTouchMainActivity");
+                ComponentName cop = new ComponentName("com.tencent.mm","com.tencent.mm.ui.transmit.SelectConversationUI");
+                intent.setComponent(cop);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(Intent.EXTRA_TEXT, text);
+                startActivity(intent);
+
+
+              /*  Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("weixin://dl/settings"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);*/
 
@@ -164,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 String imeiCard = MyUtils.getImeiCard(MainActivity.this);
 
                 Toast.makeText(MainActivity.this,
-                    "imei1:" + imei + "----imei2:" + imei2 + "  卡槽数：" + imeiCard, Toast.LENGTH_LONG).show();
+                        "imei1:" + imei + "----imei2:" + imei2 + "  卡槽数：" + imeiCard, Toast.LENGTH_LONG).show();
             }
         });
 
@@ -223,20 +225,20 @@ public class MainActivity extends AppCompatActivity {
                 });*/
 
                 String s =
-                    "https://equity.tmall.com/tm?spm=a2o5r.9022594.0"
-                        + ".0&agentId=636202&_bind=true&bc_fl_src=tmall_market_llb_1_800826&llbPlatform=_pube&llbOsd"
-                        + "=1&afc_userId=3571644191&scheme=tbopen&oldUserId=3571644191&deviceLevel=-1&hasLoginToken"
-                        + "=true&afc_id=afc_link%5Ecom.ss.android.ugc"
-                        + ".aweme%5Enbc%5Ee38b369b-820b-4e39-8f85-b9716321c6de_1591537622204&launchType=COLD&afcflow"
-                        + "=com.ss.android.ugc.aweme&isNeedHome=0&afcBackUrl=https%3A%2F%2Fm.taobao.com%2Findex"
-                        + ".htm%3Fscrollto%3Drecmd%26target%3Dguess%26recmdparams%3D%257b%2522tabindex%2522%253a0"
-                        + "%252c%2522bizparams%2522%253a%257b%2522outPushPlanId%2522%253a%25223YfuAj%2522%252c"
-                        + "%2522test%2522%253a%2522testvalue%2522%257d%257d%26tppabid%3D170722%26pvid%3D186e2043-4f26"
-                        + "-4fd6-9643-0d9caa3a95af%26bucketid%3DGuDing%26_afc_params_json%3D%257B%2522tppabid%2522"
-                        + "%253A%2522170722%2522%252C%2522appKey%2522%253A%2522wild_baichuanpingtai_appkey%2522%252C"
-                        + "%2522bc_fl_src%2522%253A%2522unknow%2522%252C%2522shopId%2522%253A%2522unknow%2522%257D"
-                        + "%26_afc_params_kv%3DappKey%2501wild_baichuanpingtai_appkey%2502bc_fl_src%2501unknow"
-                        + "%2502shopId%2501unknow%2502tppabid%2501170722%26launchType%3DCOLD";
+                        "https://equity.tmall.com/tm?spm=a2o5r.9022594.0"
+                                + ".0&agentId=636202&_bind=true&bc_fl_src=tmall_market_llb_1_800826&llbPlatform=_pube&llbOsd"
+                                + "=1&afc_userId=3571644191&scheme=tbopen&oldUserId=3571644191&deviceLevel=-1&hasLoginToken"
+                                + "=true&afc_id=afc_link%5Ecom.ss.android.ugc"
+                                + ".aweme%5Enbc%5Ee38b369b-820b-4e39-8f85-b9716321c6de_1591537622204&launchType=COLD&afcflow"
+                                + "=com.ss.android.ugc.aweme&isNeedHome=0&afcBackUrl=https%3A%2F%2Fm.taobao.com%2Findex"
+                                + ".htm%3Fscrollto%3Drecmd%26target%3Dguess%26recmdparams%3D%257b%2522tabindex%2522%253a0"
+                                + "%252c%2522bizparams%2522%253a%257b%2522outPushPlanId%2522%253a%25223YfuAj%2522%252c"
+                                + "%2522test%2522%253a%2522testvalue%2522%257d%257d%26tppabid%3D170722%26pvid%3D186e2043-4f26"
+                                + "-4fd6-9643-0d9caa3a95af%26bucketid%3DGuDing%26_afc_params_json%3D%257B%2522tppabid%2522"
+                                + "%253A%2522170722%2522%252C%2522appKey%2522%253A%2522wild_baichuanpingtai_appkey%2522%252C"
+                                + "%2522bc_fl_src%2522%253A%2522unknow%2522%252C%2522shopId%2522%253A%2522unknow%2522%257D"
+                                + "%26_afc_params_kv%3DappKey%2501wild_baichuanpingtai_appkey%2502bc_fl_src%2501unknow"
+                                + "%2502shopId%2501unknow%2502tppabid%2501170722%26launchType%3DCOLD";
 
                 Uri mUri = Uri.parse(s);
                 String afcBackUrl = mUri.getQueryParameter("afcBackUrl");
@@ -386,17 +388,17 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "点击了", Toast.LENGTH_SHORT).show();
 
                 addShortcut(MainActivity.this, "我是测试icon 第一个", "11", R.drawable.link_semicircle
-                    ,
-                    "tbopen://m.taobao.com/tbopen/index.html?ext=default&clientId=2&materialType=1&carrierType=2"
-                        + "&authorId=LlEowB0uPR8&clientVersion=6.5.2"
-                        + ".9311&materialId=4xHkQouLbN0&itemId=lpjnOjEWStk&sourceType=2&linkUrl=https%3A%2F%2Fitem"
-                        + ".taobao.com%2Fitem.htm%3Fid%3D596138545472&linkType=0&carrierId=8MImYufSxwA&visitorId"
-                        + "=ycUl2KCsXP0&action=ali.open.nav&module=h5&appkey=24648319&TTID=2014_0_24648319"
-                        + "%40baichuan_h5_0.3.8&source=linksdk&v=0.3.8&h5Url=https%3A%2F%2Fitem.taobao.com%2Fitem"
-                        + ".htm%3Fid%3D596138545472%26params%3D%257B%2522ybhpss%2522%253A"
-                        + "%2522dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%25253D%25253D%2522%257D&params"
-                        + "=%7B%22ybhpss%22%3A%22dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%253D%253D%22"
-                        + "%7D&backURL=kwai%3A%2F%2Faction%2FbringToFront");
+                        ,
+                        "tbopen://m.taobao.com/tbopen/index.html?ext=default&clientId=2&materialType=1&carrierType=2"
+                                + "&authorId=LlEowB0uPR8&clientVersion=6.5.2"
+                                + ".9311&materialId=4xHkQouLbN0&itemId=lpjnOjEWStk&sourceType=2&linkUrl=https%3A%2F%2Fitem"
+                                + ".taobao.com%2Fitem.htm%3Fid%3D596138545472&linkType=0&carrierId=8MImYufSxwA&visitorId"
+                                + "=ycUl2KCsXP0&action=ali.open.nav&module=h5&appkey=24648319&TTID=2014_0_24648319"
+                                + "%40baichuan_h5_0.3.8&source=linksdk&v=0.3.8&h5Url=https%3A%2F%2Fitem.taobao.com%2Fitem"
+                                + ".htm%3Fid%3D596138545472%26params%3D%257B%2522ybhpss%2522%253A"
+                                + "%2522dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%25253D%25253D%2522%257D&params"
+                                + "=%7B%22ybhpss%22%3A%22dHRpZD0yMDE0XzBfMjQ2NDgzMTklNDBiYWljaHVhbl9oNV8wLjMuOA%253D%253D%22"
+                                + "%7D&backURL=kwai%3A%2F%2Faction%2FbringToFront");
             }
         });
 
@@ -406,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "点击了222222", Toast.LENGTH_SHORT).show();
 
                 addShortcut(MainActivity.this, "我是测试icon 第2个", "22", R.drawable.link_semicircle
-                    , "http://wapp.m.taobao.com");
+                        , "http://wapp.m.taobao.com");
             }
         });
 
@@ -448,7 +450,7 @@ public class MainActivity extends AppCompatActivity {
             return "";
         }
 
-        ClipboardManager clipboard = (ClipboardManager)context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
         // 检查剪贴板是否有内容
         if (!clipboard.hasPrimaryClip()) {
@@ -508,7 +510,7 @@ public class MainActivity extends AppCompatActivity {
      * @return 返回转换后的px值
      */
     private int dp2px(int dp) {
-        return (int)(dp * Resources.getSystem().getDisplayMetrics().density);
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
     }
 
     /**
@@ -521,7 +523,7 @@ public class MainActivity extends AppCompatActivity {
 
             String ACTION_MANAGE_OVERLAY_PERMISSION = "android.settings.action.MANAGE_OVERLAY_PERMISSION";
             Intent intent = new Intent(ACTION_MANAGE_OVERLAY_PERMISSION,
-                Uri.parse("package:" + context.getPackageName()));
+                    Uri.parse("package:" + context.getPackageName()));
             startActivityForResult(intent, 5004);
         }
     }
