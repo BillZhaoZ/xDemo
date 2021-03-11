@@ -44,7 +44,7 @@
 
                  <data
                      android:host="f6yvz7.biz"
-                     android:path="/index.html"
+                     android:path="/ulk/litetao"
                      android:scheme="https" />
              </intent-filter>
 
@@ -69,7 +69,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
-            <intent-filter
+          <!--  <intent-filter
                 android:autoVerify="true"
                 tools:targetApi="m">
                 <action android:name="android.intent.action.VIEW" />
@@ -80,7 +80,8 @@
                 <data
                     android:host="userlink-wakeup.oss-cn-hangzhou.aliyuncs.com"
                     android:scheme="https" />
-            </intent-filter>
+            </intent-filter>-->
+
         </activity>
 
 
