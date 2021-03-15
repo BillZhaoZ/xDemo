@@ -119,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 ClipboardManager systemService = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 getClickBoardText(systemService);
 
-                ClipData clipData = getIntent().getClipData();
-                
+
                 String text = test.getText().toString();
 
               /*  Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.cccc);
@@ -152,22 +151,9 @@ public class MainActivity extends AppCompatActivity {
                 wechatIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(wechatIntent);*/
 
-                // 调用系统分享
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                intent.setType("text/plain");
-//                intent.setPackage("com.tencent.mm");
-
-                ComponentName cop = new ComponentName("com.tencent.mm","com.tencent.mm.ui.transmit.SelectConversationUI");
-                intent.setComponent(cop);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(Intent.EXTRA_TEXT, text);
-                startActivity(intent);
-
-
               /*  Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse("weixin://dl/settings"));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);*/
-
             }
         });
 

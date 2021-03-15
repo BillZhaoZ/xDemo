@@ -16,24 +16,21 @@ import java.util.TreeMap;
 
 public class Test {
 
-
     public static Map<String, Integer> params = new TreeMap<>();  //扩展参数
-
     private static List<String> dataList = new ArrayList<>();
-
     public static Map<String, ArrayList<String>> paramsAdv = new TreeMap<>();  //扩展参数
-
-
     private static List<Integer> arrayData = new ArrayList<>();
-
     public static Map<Integer, Integer> paramsadddddd = new TreeMap<>();  //扩展参数
-
     private static ArrayList<String> temp = new ArrayList<>();
+
 
     public static void main(String[] args) {
 
+        String s = "1122344444   " + "sssss";
+        System.out.println(s.trim());
 
-        try {
+
+       /* try {
             HashMap<Object, Object> objectObjectHashMap = new HashMap<>();
 
             Object taobao = objectObjectHashMap.get("taobao");
@@ -46,12 +43,10 @@ public class Test {
 
         }
 
-        System.out.println("渠道id：ccccccc");
+        System.out.println("渠道id：ccccccc");*/
 
 
 //        getAdvid();
-
-
         // System.out.println("dataListAdv=" + stringIntegerEntry);
 
 //        fileList("/Users/bill/Downloads/files_10.10");
