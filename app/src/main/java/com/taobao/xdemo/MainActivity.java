@@ -74,9 +74,34 @@ public class MainActivity extends AppCompatActivity {
             refererField.setAccessible(true);
             String referrer = (String) refererField.get(MainActivity.this);
             return referrer;
-        } catch (ClassNotFoundException | IllegalAccessException | NoSuchFieldException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return "No referrer";
+        }
+    }
+
+    public static String getClickBoardText(ClipboardManager clipboard) {
+        try {
+            if (clipboard == null) {
+                return null;
+            } else {
+                ClipData primaryClip = clipboard.getPrimaryClip();
+                if (primaryClip != null && primaryClip.getItemCount() >= 1) {
+                    CharSequence label = primaryClip.getDescription().getLabel();
+                    Log.e("share_test", label.toString());
+                    ClipData.Item lastItem = primaryClip.getItemAt(0);
+                    if (lastItem == null) {
+                        return null;
+                    } else {
+                        CharSequence content = lastItem.getText();
+                        return TextUtils.isEmpty(content) ? null : content.toString();
+                    }
+                } else {
+                    return null;
+                }
+            }
+        } catch (Exception var5) {
+            return null;
         }
     }
 
@@ -90,6 +115,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.tv_test).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                ClipboardManager systemService = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                getClickBoardText(systemService);
+
+
 
                 String text = test.getText().toString();
 
