@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
                     CharSequence label = primaryClip.getDescription().getLabel();
                     Log.e("share_test", label.toString());
                     ClipData.Item lastItem = primaryClip.getItemAt(0);
+
                     if (lastItem == null) {
                         return null;
                     } else {
@@ -118,8 +119,8 @@ public class MainActivity extends AppCompatActivity {
                 ClipboardManager systemService = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 getClickBoardText(systemService);
 
-
-
+                ClipData clipData = getIntent().getClipData();
+                
                 String text = test.getText().toString();
 
               /*  Bitmap bitmap = BitmapFactory.decodeResource(MainActivity.this.getResources(), R.drawable.cccc);
