@@ -22,7 +22,3 @@ git push origin "$1"
 sleep 1s
 
 echo "### 推送成功，开始编译 ###"
-
-def p -d
-
-echo "### 编译成功，可以测试 ###"
